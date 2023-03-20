@@ -6,11 +6,13 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.validator.ReleaseDate;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Data
 public class Film {
+    @NotNull
     private long id;
     @NotBlank
     private String name;
