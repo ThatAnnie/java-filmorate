@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.dao.UserRepository;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-    private UserRepository userRepository= new UserRepository();
+    private InMemoryUserStorage userRepository= new InMemoryUserStorage();
 
     @GetMapping
     public List<User> getUsers() {

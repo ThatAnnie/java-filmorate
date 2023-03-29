@@ -1,7 +1,8 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 @Component
 @Slf4j
-public class UserRepository {
+public class InMemoryUserStorage implements UserStorage {
     private long generatedUserId;
     private final HashMap<Long, User> users = new HashMap<>();
 
@@ -17,6 +18,7 @@ public class UserRepository {
         return ++generatedUserId;
     }
 
+    @Override
     public User saveUser(User user) {
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
@@ -26,6 +28,7 @@ public class UserRepository {
         return users.get(user.getId());
     }
 
+    @Override
     public User updateUser(User user) {
         if (!users.containsKey(user.getId())) {
             log.warn("user with id={} not exist", user.getId());
@@ -35,6 +38,7 @@ public class UserRepository {
         return users.get(user.getId());
     }
 
+    @Override
     public ArrayList<User> getUserList() {
         return new ArrayList<>(users.values());
     }
