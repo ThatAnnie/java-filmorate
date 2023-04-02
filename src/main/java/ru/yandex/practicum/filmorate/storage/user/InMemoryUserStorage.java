@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -41,5 +42,10 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public ArrayList<User> getUserList() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+            return Optional.ofNullable(users.get(id));
     }
 }

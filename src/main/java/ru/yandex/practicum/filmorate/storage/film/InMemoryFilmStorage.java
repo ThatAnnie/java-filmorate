@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -39,5 +39,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public ArrayList<Film> getFilmList() {
         return new ArrayList<>(films.values());
+    }
+
+    @Override
+    public Optional<Film> getFilmById(Long id) {
+        return Optional.ofNullable(films.get(id));
     }
 }
