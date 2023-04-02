@@ -22,7 +22,7 @@ class UserControllerTest {
     private UserController controller;
 
     @BeforeEach
-    private void createController(){
+    private void createController() {
         UserStorage userStorage = new InMemoryUserStorage();
         UserService userService = new UserService(userStorage);
         controller = new UserController(userService);
@@ -81,7 +81,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findUser(){
+    void findUser() {
         User user = createNewUser();
         controller.createUser(user);
         User userInController = controller.getUserById(1L);
@@ -89,7 +89,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findNotExistUser(){
+    void findNotExistUser() {
         EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getUserById(1L));
         assertEquals("Пользователь с id=1 не существует.", ex.getMessage());
     }

@@ -7,7 +7,10 @@ import java.util.Optional;
 
 public interface FilmStorage {
     Film saveFilm(Film film);
+
     Film updateFilm(Film film);
+
     ArrayList<Film> getFilmList();
+
     Optional<Film> getFilmById(Long id);
 }

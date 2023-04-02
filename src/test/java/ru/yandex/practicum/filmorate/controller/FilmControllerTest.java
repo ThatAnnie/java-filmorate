@@ -20,18 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class FilmControllerTest {
-private FilmController controller;
-private UserStorage userStorage;
+    private FilmController controller;
+    private UserStorage userStorage;
 
     @BeforeEach
-    private void createController(){
+    private void createController() {
         FilmStorage filmStorage = new InMemoryFilmStorage();
         userStorage = new InMemoryUserStorage();
-        FilmService filmService = new FilmService(filmStorage, userStorage) ;
+        FilmService filmService = new FilmService(filmStorage, userStorage);
         controller = new FilmController(filmService);
     }
 
-    private Film createNewFilm(){
+    private Film createNewFilm() {
         Film film = new Film();
         film.setName("ТестНазвание");
         film.setDescription("Описание");

@@ -88,8 +88,8 @@ public class UserService {
             return Collections.emptyList();
         } else {
             Set<Long> friendsSet = user.getFriends();
-            ArrayList<User> friendsList= new ArrayList<>();
-            for (Long friendId: friendsSet) {
+            ArrayList<User> friendsList = new ArrayList<>();
+            for (Long friendId : friendsSet) {
                 friendsList.add(userStorage.getUserById(friendId).get());
             }
             return friendsList;
@@ -108,11 +108,11 @@ public class UserService {
         });
         Set<Long> common = new HashSet<>(user.getFriends());
         common.retainAll(otherUser.getFriends());
-        if (common == null || common.isEmpty()) {
+        if (common.isEmpty()) {
             return Collections.emptyList();
         } else {
-            ArrayList<User> commonList= new ArrayList<>();
-            for (Long commonId: common) {
+            ArrayList<User> commonList = new ArrayList<>();
+            for (Long commonId : common) {
                 commonList.add(userStorage.getUserById(commonId).get());
             }
             return commonList;
