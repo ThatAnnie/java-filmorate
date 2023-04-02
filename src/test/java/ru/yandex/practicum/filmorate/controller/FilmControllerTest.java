@@ -7,10 +7,9 @@ import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.Storage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class FilmControllerTest {
     private FilmController controller;
-    private UserStorage userStorage;
+    private Storage<User> userStorage;
 
     @BeforeEach
     private void createController() {
-        FilmStorage filmStorage = new InMemoryFilmStorage();
+        Storage filmStorage = new InMemoryFilmStorage();
         userStorage = new InMemoryUserStorage();
         FilmService filmService = new FilmService(filmStorage, userStorage);
         controller = new FilmController(filmService);
@@ -45,7 +44,7 @@ class FilmControllerTest {
         user.setLogin("test");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1999, 1, 1));
-        userStorage.saveUser(user);
+        userStorage.save(user);
         return user;
     }
 

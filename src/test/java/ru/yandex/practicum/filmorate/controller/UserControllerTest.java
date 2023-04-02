@@ -6,15 +6,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.Storage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 class UserControllerTest {
@@ -23,7 +22,7 @@ class UserControllerTest {
 
     @BeforeEach
     private void createController() {
-        UserStorage userStorage = new InMemoryUserStorage();
+        Storage<User> userStorage = new InMemoryUserStorage();
         UserService userService = new UserService(userStorage);
         controller = new UserController(userService);
     }

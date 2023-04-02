@@ -5,39 +5,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
 import java.util.*;
 
 @Service
 @Slf4j
 public class UserService {
-    private UserStorage userStorage;
+    private final Storage<User> userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(Storage<User> userStorage) {
         this.userStorage = userStorage;
     }
 
     public List<User> getUsers() {
         log.info("getUsers");
-        return userStorage.getUserList();
+        return userStorage.getList();
     }
 
     public User createUser(User user) {
-        userStorage.saveUser(user);
+        userStorage.save(user);
         log.info("createUser: {}", user);
         return user;
     }
 
     public User updateUser(User user) {
         log.info("updateUser: {}", user);
-        return userStorage.updateUser(user);
+        return userStorage.update(user);
     }
 
     public User getUserById(Long id) {
         log.info("getUserById with id={}", id);
-        return userStorage.getUserById(id).orElseThrow(() -> {
+        return userStorage.getById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
@@ -45,11 +45,11 @@ public class UserService {
 
     public void addFriend(Long id, Long friendId) {
         log.info("addFriend - user with id={} add friend with id={}", id, friendId);
-        User user = userStorage.getUserById(id).orElseThrow(() -> {
+        User user = userStorage.getById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
-        User friendUser = userStorage.getUserById(friendId).orElseThrow(() -> {
+        User friendUser = userStorage.getById(friendId).orElseThrow(() -> {
             log.warn("user with id={} not exist", friendId);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", friendId));
         });
@@ -60,11 +60,11 @@ public class UserService {
 
     public void deleteFriend(Long id, Long friendId) {
         log.info("deleteFriend - user with id={} delete friend with id={}", id, friendId);
-        User user = userStorage.getUserById(id).orElseThrow(() -> {
+        User user = userStorage.getById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
-        User friendUser = userStorage.getUserById(friendId).orElseThrow(() -> {
+        User friendUser = userStorage.getById(friendId).orElseThrow(() -> {
             log.warn("user with id={} not exist", friendId);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", friendId));
         });
@@ -79,7 +79,7 @@ public class UserService {
 
     public Collection<User> getFriends(Long id) {
         log.info("getFriends of user with id={}", id);
-        User user = userStorage.getUserById(id).orElseThrow(() -> {
+        User user = userStorage.getById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
@@ -90,7 +90,7 @@ public class UserService {
             Set<Long> friendsSet = user.getFriends();
             ArrayList<User> friendsList = new ArrayList<>();
             for (Long friendId : friendsSet) {
-                friendsList.add(userStorage.getUserById(friendId).get());
+                friendsList.add(userStorage.getById(friendId).get());
             }
             return friendsList;
         }
@@ -98,11 +98,11 @@ public class UserService {
 
     public Collection<User> getCommonFriends(Long id, Long otherId) {
         log.info("getCommonFriends of users with id={} and id={}", id, otherId);
-        User user = userStorage.getUserById(id).orElseThrow(() -> {
+        User user = userStorage.getById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
-        User otherUser = userStorage.getUserById(otherId).orElseThrow(() -> {
+        User otherUser = userStorage.getById(otherId).orElseThrow(() -> {
             log.warn("user with id={} not exist", otherId);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", otherId));
         });
@@ -113,7 +113,7 @@ public class UserService {
         } else {
             ArrayList<User> commonList = new ArrayList<>();
             for (Long commonId : common) {
-                commonList.add(userStorage.getUserById(commonId).get());
+                commonList.add(userStorage.getById(commonId).get());
             }
             return commonList;
         }
