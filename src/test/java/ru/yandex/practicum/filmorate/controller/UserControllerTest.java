@@ -84,13 +84,13 @@ class UserControllerTest {
     void findUser(){
         User user = createNewUser();
         controller.createUser(user);
-        User userInController = controller.findUser(1L);
+        User userInController = controller.getUserById(1L);
         assertEquals(user, userInController);
     }
 
     @Test
     void findNotExistUser(){
-        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.findUser(1L));
+        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getUserById(1L));
         assertEquals("Пользователь с id=1 не существует.", ex.getMessage());
     }
 
@@ -180,14 +180,14 @@ class UserControllerTest {
         user3 = controller.createUser(user3);
         controller.addFriend(user1.getId(), user2.getId());
         controller.addFriend(user1.getId(), user3.getId());
-        assertEquals(2, controller.findFriends(user1.getId()).size());
-        assertTrue(controller.findFriends(user1.getId()).contains(user2));
-        assertTrue(controller.findFriends(user1.getId()).contains(user3));
+        assertEquals(2, controller.getFriends(user1.getId()).size());
+        assertTrue(controller.getFriends(user1.getId()).contains(user2));
+        assertTrue(controller.getFriends(user1.getId()).contains(user3));
     }
 
     @Test
     void findFriendsUserNotExist() {
-        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.findFriends(1L));
+        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getFriends(1L));
         assertEquals("Пользователь с id=1 не существует.", ex.getMessage());
     }
 
@@ -195,7 +195,7 @@ class UserControllerTest {
     void findFriendsUserHasNoFriends() {
         User user1 = createNewUser();
         controller.createUser(user1);
-        assertEquals(0, controller.findFriends(1L).size());
+        assertEquals(0, controller.getFriends(1L).size());
     }
 
     @Test
@@ -214,13 +214,13 @@ class UserControllerTest {
         user3 = controller.createUser(user3);
         controller.addFriend(user1.getId(), user2.getId());
         controller.addFriend(user3.getId(), user2.getId());
-        assertEquals(1, controller.findCommonFriends(user1.getId(), user3.getId()).size());
-        assertTrue(controller.findCommonFriends(user1.getId(), user3.getId()).contains(user2));
+        assertEquals(1, controller.getCommonFriends(user1.getId(), user3.getId()).size());
+        assertTrue(controller.getCommonFriends(user1.getId(), user3.getId()).contains(user2));
     }
 
     @Test
     void findCommonFriendsUserNotExist() {
-        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.findCommonFriends(1L, 2L));
+        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getCommonFriends(1L, 2L));
         assertEquals("Пользователь с id=1 не существует.", ex.getMessage());
     }
 
@@ -228,7 +228,7 @@ class UserControllerTest {
     void findCommonFriendsUserFriendNotExist() {
         User user1 = createNewUser();
         controller.createUser(user1);
-        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.findCommonFriends(1L, 2L));
+        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getCommonFriends(1L, 2L));
         assertEquals("Пользователь с id=2 не существует.", ex.getMessage());
     }
 
@@ -241,7 +241,7 @@ class UserControllerTest {
         user2.setEmail("test2@test.ru");
         user2.setBirthday(LocalDate.of(2000, 1, 1));
         controller.createUser(user2);
-        assertEquals(0, controller.findCommonFriends(1L, 2L).size());
+        assertEquals(0, controller.getCommonFriends(1L, 2L).size());
     }
 
 }

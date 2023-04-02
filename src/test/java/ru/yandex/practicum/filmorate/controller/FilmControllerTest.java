@@ -99,13 +99,13 @@ private UserStorage userStorage;
     void findFilm() {
         Film film = createNewFilm();
         controller.saveFilm(film);
-        Film filmInController = controller.findFilm(1L);
+        Film filmInController = controller.getFilmById(1L);
         assertEquals(film, filmInController);
     }
 
     @Test
     void findNotExistFilm() {
-        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.findFilm(1L));
+        EntityNotExistException ex = assertThrows(EntityNotExistException.class, () -> controller.getFilmById(1L));
         assertEquals("Фильм с id=1 не существует.", ex.getMessage());
     }
 
@@ -176,7 +176,7 @@ private UserStorage userStorage;
         controller.saveFilm(film2);
         controller.addLike(film2.getId(), user1.getId());
         controller.addLike(film2.getId(), user2.getId());
-        assertEquals(1, controller.findPopularFilms(1).size());
-        assertTrue(controller.findPopularFilms(1).contains(film2));
+        assertEquals(1, controller.getPopularFilms(1).size());
+        assertTrue(controller.getPopularFilms(1).contains(film2));
     }
 }

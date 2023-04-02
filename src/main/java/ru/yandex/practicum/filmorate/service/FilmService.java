@@ -38,7 +38,8 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public Film getFilm(Long id) {
+    public Film getFilmById(Long id) {
+        log.info("getFilmById with id={}", id);
         return filmStorage.getFilmById(id).orElseThrow(() -> {
             log.warn("film with id={} not exist", id);
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", id));
@@ -46,6 +47,7 @@ public class FilmService {
     }
 
     public void addLike(Long id, Long userId) {
+        log.info("addLike for film with id={} by user with id={}", id, userId);
         Film film = filmStorage.getFilmById(id).orElseThrow(() -> {
             log.warn("film with id={} not exist", id);
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", id));
@@ -58,6 +60,7 @@ public class FilmService {
     }
 
     public void deleteLike(Long id, Long userId) {
+        log.info("deleteLike from film with id={} by user with id={}", id, userId);
         Film film = filmStorage.getFilmById(id).orElseThrow(() -> {
             log.warn("film with id={} not exist", id);
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", id));
@@ -70,6 +73,7 @@ public class FilmService {
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
+        log.info("getPopularFilms count={}", count);
         return getFilms().stream()
                 .sorted(Comparator.comparing(Film::getNumberOfLikes).reversed())
                 .limit(Objects.requireNonNullElse(count, 10))

@@ -36,6 +36,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
+        log.info("getUserById with id={}", id);
         return userStorage.getUserById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
@@ -43,6 +44,7 @@ public class UserService {
     }
 
     public void addFriend(Long id, Long friendId) {
+        log.info("addFriend - user with id={} add friend with id={}", id, friendId);
         User user = userStorage.getUserById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
@@ -57,6 +59,7 @@ public class UserService {
     }
 
     public void deleteFriend(Long id, Long friendId) {
+        log.info("deleteFriend - user with id={} delete friend with id={}", id, friendId);
         User user = userStorage.getUserById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
@@ -75,6 +78,7 @@ public class UserService {
     }
 
     public Collection<User> getFriends(Long id) {
+        log.info("getFriends of user with id={}", id);
         User user = userStorage.getUserById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
@@ -93,6 +97,7 @@ public class UserService {
     }
 
     public Collection<User> getCommonFriends(Long id, Long otherId) {
+        log.info("getCommonFriends of users with id={} and id={}", id, otherId);
         User user = userStorage.getUserById(id).orElseThrow(() -> {
             log.warn("user with id={} not exist", id);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
