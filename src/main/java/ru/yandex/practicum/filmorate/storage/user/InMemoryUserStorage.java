@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class InMemoryUserStorage implements Storage<User> {
+public class InMemoryUserStorage implements UserStorage {
     private long generatedUserId;
     private final HashMap<Long, User> users = new HashMap<>();
 
