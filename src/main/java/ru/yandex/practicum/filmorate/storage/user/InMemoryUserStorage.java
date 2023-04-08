@@ -1,15 +1,17 @@
-package ru.yandex.practicum.filmorate.dao;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Component
 @Slf4j
-public class UserRepository {
+public class InMemoryUserStorage implements UserStorage {
     private long generatedUserId;
     private final HashMap<Long, User> users = new HashMap<>();
 
@@ -17,7 +19,8 @@ public class UserRepository {
         return ++generatedUserId;
     }
 
-    public User saveUser(User user) {
+    @Override
+    public User save(User user) {
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
@@ -26,7 +29,8 @@ public class UserRepository {
         return users.get(user.getId());
     }
 
-    public User updateUser(User user) {
+    @Override
+    public User update(User user) {
         if (!users.containsKey(user.getId())) {
             log.warn("user with id={} not exist", user.getId());
             throw new EntityNotExistException("Пользователь с таким id не существует.");
@@ -35,7 +39,13 @@ public class UserRepository {
         return users.get(user.getId());
     }
 
-    public ArrayList<User> getUserList() {
+    @Override
+    public ArrayList<User> getList() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public Optional<User> getById(Long id) {
+        return Optional.ofNullable(users.get(id));
     }
 }

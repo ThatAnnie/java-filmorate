@@ -14,12 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     private static Validator validator;
+
     static {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.usingContext().getValidator();
     }
 
-    private User createNewUser(){
+    private User createNewUser() {
         User user = new User();
         user.setLogin("test");
         user.setEmail("test@test.ru");

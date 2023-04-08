@@ -14,12 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FilmTest {
     private static Validator validator;
+
     static {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.usingContext().getValidator();
     }
 
-    private Film createNewFilm(){
+    private Film createNewFilm() {
         Film film = new Film();
         film.setName("ТестНазвание");
         film.setDescription("Описание");
