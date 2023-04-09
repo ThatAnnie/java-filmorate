@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Data
 public class Film {
     @NotNull
-    private long id;
+    private int id;
     @NotBlank
     private String name;
     @Size(max = 200)
