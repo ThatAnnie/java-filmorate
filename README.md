@@ -23,13 +23,13 @@ SELECT * FROM user WHERE user_id = <id>;
 
 Получение друзей пользователя по id*:
 ```
-SELECT friend_id FROM friendship WHERE user_id = <id> AND is_confirmed = TRUE;
+SELECT friend_id FROM friendship WHERE user_id = <id>;
 ```
 
 Получения общих друзей пользователей*:
 ```
 SELECT f.friend_id FROM friendship f1 INNER JOIN friendship f2 ON f1.friend_id = f2.friend_id 
-WHERE f1.user_id = <id1> AND f1.is_confirmed = TRUE AND f2.user_id = <id2> AND f2.is_confirmed = TRUE;
+WHERE f1.user_id = <id1> AND f2.user_id = <id2>;
 ```
 
 \* Пользователь считается другом, если он подтвержден.
