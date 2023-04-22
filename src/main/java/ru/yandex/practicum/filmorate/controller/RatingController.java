@@ -21,7 +21,7 @@ public class RatingController {
     }
 
     @GetMapping
-    public List<Rating> getRatings(){
+    public List<Rating> getRatings() {
         return ratingService.getRatings();
     }
 
