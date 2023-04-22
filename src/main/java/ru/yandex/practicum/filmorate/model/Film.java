@@ -27,7 +27,7 @@ public class Film {
     @Positive
     private int duration;
     private final Set<Long> usersLikes = new HashSet<>();
-    private List<Genre> genres = new ArrayList<>();;
+    private List<Genre> genres = new ArrayList<>();
     private Rating mpa;
 
     public static Integer getNumberOfLikes(Film film) {

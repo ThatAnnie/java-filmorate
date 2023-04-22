@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserStorage extends Storage<User> {
     void addFriend(Long id, Long friendId);
+
     void deleteFriend(Long id, Long friendId);
 
     List<User> getFriends(Long id);
