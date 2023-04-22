@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -21,9 +19,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User save(User user) {
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
         user.setId(generateId());
         users.put(user.getId(), user);
         return users.get(user.getId());
@@ -40,12 +35,53 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public ArrayList<User> getList() {
+    public List<User> getList() {
         return new ArrayList<>(users.values());
     }
 
     @Override
     public Optional<User> getById(Long id) {
         return Optional.ofNullable(users.get(id));
+    }
+
+    @Override
+    public void addFriend(Long id, Long friendId) {
+        User user = getById(id).get();
+        user.getFriends().add(friendId);
+    }
+
+    @Override
+    public void deleteFriend(Long id, Long friendId) {
+        User user = getById(id).get();
+        user.getFriends().remove(friendId);
+        User friendUser = getById(friendId).get();
+        friendUser.getFriends().remove(id);
+    }
+
+    @Override
+    public List<User> getFriends(Long id) {
+        Set<Long> friendsSet = getById(id).get().getFriends();
+        ArrayList<User> friendsList = new ArrayList<>();
+        for (Long friendId : friendsSet) {
+            friendsList.add(getById(friendId).get());
+        }
+        return friendsList;
+    }
+
+    @Override
+    public List<User> getCommonFriends(Long id, Long otherId) {
+        User user = getById(id).get();
+        User otherUser = getById(otherId).get();
+        Set<Long> common = new HashSet<>(user.getFriends());
+        common.retainAll(otherUser.getFriends());
+        if (common.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            ArrayList<User> commonList = new ArrayList<>();
+            for (Long commonId : common) {
+                commonList.add(getById(commonId).get());
+            }
+            return commonList;
+        }
     }
 }

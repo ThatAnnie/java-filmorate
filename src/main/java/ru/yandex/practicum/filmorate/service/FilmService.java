@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -56,7 +55,7 @@ public class FilmService {
             log.warn("user with id={} not exist", userId);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", userId));
         });
-        film.getUsersLikes().add(userId);
+        filmStorage.addLike(id, userId);
     }
 
     public void deleteLike(Long id, Long userId) {
@@ -69,14 +68,11 @@ public class FilmService {
             log.warn("user with id={} not exist", userId);
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", userId));
         });
-        film.getUsersLikes().remove(userId);
+        filmStorage.deleteLike(id, userId);
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
         log.info("getPopularFilms count={}", count);
-        return getFilms().stream()
-                .sorted(Comparator.comparing(Film::getNumberOfLikes).reversed())
-                .limit(Objects.requireNonNullElse(count, 10))
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilms(count);
     }
 }

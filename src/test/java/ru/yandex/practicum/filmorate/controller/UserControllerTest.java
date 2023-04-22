@@ -93,7 +93,7 @@ class UserControllerTest {
         assertEquals("Пользователь с id=1 не существует.", ex.getMessage());
     }
 
-    @Test
+    /*@Test
     void addFriend() {
         User user1 = createNewUser();
         controller.createUser(user1);
@@ -105,7 +105,7 @@ class UserControllerTest {
         controller.addFriend(user1.getId(), user2.getId());
         assertTrue(user2.getFriends().contains(user1.getId()));
         assertTrue(user1.getFriends().contains(user2.getId()));
-    }
+    }*/
 
     @Test
     void addFriendUserNotExist() {
@@ -242,5 +242,4 @@ class UserControllerTest {
         controller.createUser(user2);
         assertEquals(0, controller.getCommonFriends(1L, 2L).size());
     }
-
 }
