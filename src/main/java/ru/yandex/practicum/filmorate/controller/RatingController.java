@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/mpa")
 public class RatingController {
-    RatingService ratingService;
+    private RatingService ratingService;
 
     @Autowired
     public RatingController(RatingService ratingService) {

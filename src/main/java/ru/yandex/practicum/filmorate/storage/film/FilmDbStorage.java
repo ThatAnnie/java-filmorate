@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
@@ -16,10 +17,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Primary
@@ -68,7 +66,8 @@ public class FilmDbStorage implements FilmStorage {
         }));
         if (!film.getGenres().isEmpty() && film.getGenres() != null) {
             genreStorage.addFilmGenres(film);
-            film.setGenres(genreStorage.getGenresByFilmId(film.getId()));
+            Set<Genre> filmGenres = new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()));
+            film.setGenres(filmGenres);
         }
         return film;
     }
@@ -94,7 +93,8 @@ public class FilmDbStorage implements FilmStorage {
                 film.getId());
         if (!film.getGenres().isEmpty() && film.getGenres() != null) {
             genreStorage.addFilmGenres(film);
-            film.setGenres(genreStorage.getGenresByFilmId(film.getId()));
+            Set<Genre> filmGenres = new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()));
+            film.setGenres(filmGenres);
         }
         film.setMpa(ratingStorage.getById(film.getMpa().getId()).orElseThrow(() -> {
             log.warn("mpa with id={} not exist", film.getMpa().getId());
@@ -107,7 +107,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getList() {
         String sql = "SELECT * FROM films ORDER BY film_id";
         List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
-        films.stream().forEach((film) -> film.setGenres(genreStorage.getGenresByFilmId(film.getId())));
+        films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
         return films;
     }
 
@@ -119,30 +119,8 @@ public class FilmDbStorage implements FilmStorage {
             return Optional.empty();
         }
         Film film = result.get(0);
-        film.setGenres(genreStorage.getGenresByFilmId(film.getId()));
+        Set<Genre> filmGenres = new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()));
+        film.setGenres(filmGenres);
         return Optional.ofNullable(film);
-    }
-
-    @Override
-    public void addLike(Long id, Long userId) {
-        String sql = "INSERT INTO film_like (film_id, user_id) VALUES(?, ?)";
-        jdbcTemplate.update(sql, id, userId);
-    }
-
-    @Override
-    public void deleteLike(Long id, Long userId) {
-        String sql = "DELETE FROM film_like WHERE film_id = ? AND user_id = ?";
-        jdbcTemplate.update(sql, id, userId);
-    }
-
-    @Override
-    public Collection<Film> getPopularFilms(Integer count) {
-        final String sql = "SELECT f.film_id FROM films f " +
-                "LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
-                "GROUP BY f.film_id ORDER BY COUNT(user_id) DESC LIMIT ?";
-        List<Long> result = jdbcTemplate.queryForList(sql, Long.class, count);
-        List<Film> popularFilms = new ArrayList<>();
-        result.forEach((filmId) -> popularFilms.add(getById(filmId).get()));
-        return popularFilms;
     }
 }

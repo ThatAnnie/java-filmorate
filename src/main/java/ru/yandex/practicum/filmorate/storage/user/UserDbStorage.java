@@ -13,7 +13,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,37 +89,5 @@ public class UserDbStorage implements UserStorage {
             return Optional.empty();
         }
         return Optional.ofNullable(result.get(0));
-    }
-
-    @Override
-    public void addFriend(Long id, Long friendId) {
-        String sql = "INSERT INTO friendship (user_id, friend_id) VALUES(?, ?)";
-        jdbcTemplate.update(sql, id, friendId);
-    }
-
-    @Override
-    public void deleteFriend(Long id, Long friendId) {
-        String sql = "DELETE FROM friendship WHERE user_id = ? AND friend_id = ?";
-        jdbcTemplate.update(sql, id, friendId);
-    }
-
-    @Override
-    public List<User> getFriends(Long id) {
-        String sql = "SELECT friend_id FROM friendship WHERE user_id = ? order by friend_id";
-
-        List<Long> result = jdbcTemplate.queryForList(sql, Long.class, id);
-        List<User> friends = new ArrayList<>();
-        result.forEach((friendId) -> friends.add(getById(friendId).get()));
-        return friends;
-    }
-
-    @Override
-    public List<User> getCommonFriends(Long id, Long otherId) {
-        String sql = "SELECT f1.friend_id FROM friendship f1 INNER JOIN friendship f2 ON f1.friend_id = f2.friend_id " +
-                "WHERE f1.user_id = ? AND f2.user_id = ?";
-        List<Long> result = jdbcTemplate.queryForList(sql, Long.class, id, otherId);
-        List<User> commonFriends = new ArrayList<>();
-        result.forEach((friendId) -> commonFriends.add(getById(friendId).get()));
-        return commonFriends;
     }
 }

@@ -12,7 +12,9 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.friendship.FriendshipDbStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
@@ -30,6 +32,8 @@ public class FilmorateApplicationTests {
     private final FilmDbStorage filmDbStorage;
     private final GenreDbStorage genreDbStorage;
     private final RatingDbStorage ratingDbStorage;
+    private final LikeDbStorage likeDbStorage;
+    private final FriendshipDbStorage friendshipDbStorage;
     private final JdbcTemplate jdbcTemplate;
 
     @AfterEach
@@ -166,10 +170,10 @@ public class FilmorateApplicationTests {
         film.setReleaseDate(LocalDate.of(2010, 02, 9));
         film.setMpa(mpa);
         Film filmDB = filmDbStorage.save(film);
-        filmDbStorage.addLike(filmDB.getId(), userDB.getId());
-        filmDbStorage.deleteLike(filmDB.getId(), userDB.getId());
+        likeDbStorage.addLike(filmDB.getId(), userDB.getId());
+        likeDbStorage.deleteLike(filmDB.getId(), userDB.getId());
         Film filmCheck = filmDbStorage.getById(filmDB.getId()).get();
-        assertThat(filmCheck.getUsersLikes().size()).isEqualTo(0);
+        assertThat(likeDbStorage.getUsersLikesByFilm(filmCheck.getId()).size()).isEqualTo(0);
     }
 
     @Test
@@ -215,13 +219,13 @@ public class FilmorateApplicationTests {
         film3.setReleaseDate(LocalDate.of(2010, 02, 9));
         film3.setMpa(mpa);
         Film filmDB3 = filmDbStorage.save(film3);
-        filmDbStorage.addLike(filmDB1.getId(), userDB2.getId());
-        filmDbStorage.addLike(filmDB1.getId(), userDB3.getId());
-        filmDbStorage.addLike(filmDB1.getId(), userDB4.getId());
-        filmDbStorage.addLike(filmDB3.getId(), userDB2.getId());
-        filmDbStorage.addLike(filmDB3.getId(), userDB4.getId());
-        filmDbStorage.addLike(filmDB2.getId(), userDB3.getId());
-        Collection<Film> popularFilms = filmDbStorage.getPopularFilms(2);
+        likeDbStorage.addLike(filmDB1.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB3.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB4.getId());
+        likeDbStorage.addLike(filmDB3.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB3.getId(), userDB4.getId());
+        likeDbStorage.addLike(filmDB2.getId(), userDB3.getId());
+        Collection<Film> popularFilms = likeDbStorage.getPopularFilms(2);
         assertThat(popularFilms.size()).isEqualTo(2);
         assertThat(popularFilms.contains(filmDB1)).isTrue();
         assertThat(popularFilms.contains(filmDB3)).isTrue();
@@ -312,12 +316,12 @@ public class FilmorateApplicationTests {
         user2.setBirthday(LocalDate.of(1994, 03, 9));
         User userDB2 = userDbStorage.save(user2);
         Long id2 = userDB2.getId();
-        userDbStorage.addFriend(id1, id2);
-        List<User> friends = userDbStorage.getFriends(id1);
+        friendshipDbStorage.addFriend(id1, id2);
+        List<User> friends = friendshipDbStorage.getFriends(id1);
         assertThat(friends.size()).isEqualTo(1);
         assertThat(friends.contains(userDB2)).isTrue();
-        userDbStorage.deleteFriend(id1, id2);
-        List<User> friendsDelete = userDbStorage.getFriends(id1);
+        friendshipDbStorage.deleteFriend(id1, id2);
+        List<User> friendsDelete = friendshipDbStorage.getFriends(id1);
         assertThat(friendsDelete.size()).isEqualTo(0);
     }
 
@@ -345,9 +349,9 @@ public class FilmorateApplicationTests {
         User userDB3 = userDbStorage.save(user3);
         Long id3 = userDB3.getId();
 
-        userDbStorage.addFriend(id1, id3);
-        userDbStorage.addFriend(id2, id3);
-        List<User> friends = userDbStorage.getCommonFriends(id1, id2);
+        friendshipDbStorage.addFriend(id1, id3);
+        friendshipDbStorage.addFriend(id2, id3);
+        List<User> friends = friendshipDbStorage.getCommonFriends(id1, id2);
         assertThat(friends.size()).isEqualTo(1);
         assertThat(friends.contains(userDB3)).isTrue();
     }

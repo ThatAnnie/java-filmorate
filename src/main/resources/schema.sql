@@ -41,6 +41,8 @@ CREATE TABLE users (
 	CONSTRAINT uc_users_email UNIQUE (email),
     CONSTRAINT uc_users_login UNIQUE (login)
 );
+CREATE UNIQUE index if NOT EXISTS user_email_uindex ON users (email);
+CREATE UNIQUE index if NOT EXISTS user_login_uindex ON users (login);
 
 CREATE TABLE friendship (
     user_id bigint   NOT NULL,

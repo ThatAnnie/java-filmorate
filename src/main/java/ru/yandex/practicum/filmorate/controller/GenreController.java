@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/genres")
 public class GenreController {
-    GenreService genreService;
+    private GenreService genreService;
 
     @Autowired
     public GenreController(GenreService genreService) {

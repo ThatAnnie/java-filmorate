@@ -26,6 +26,8 @@ public class FilmTest {
         film.setDescription("Описание");
         film.setReleaseDate(LocalDate.of(2000, 1, 1));
         film.setDuration(120);
+        Rating mpa = new Rating(1, "G");
+        film.setMpa(mpa);
         return film;
     }
 
