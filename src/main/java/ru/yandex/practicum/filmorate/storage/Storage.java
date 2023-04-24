@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public interface Storage<T> {
@@ -8,7 +8,7 @@ public interface Storage<T> {
 
     T update(T entity);
 
-    ArrayList<T> getList();
+    List<T> getList();
 
     Optional<T> getById(Long id);
 }
