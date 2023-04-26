@@ -45,4 +45,9 @@ public class UserService {
             throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", id));
         });
     }
+
+    public void deleteUser(Long userId) {
+        log.info("deleteUser with id={}", userId);
+        userStorage.deleteUser(userId);
+    }
 }

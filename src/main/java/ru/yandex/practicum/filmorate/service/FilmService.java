@@ -41,4 +41,9 @@ public class FilmService {
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", id));
         });
     }
+
+    public void deleteFilm(Long filmId) {
+        log.info("deleteFilm with id={}", filmId);
+        filmStorage.deleteFilm(filmId);
+    }
 }
