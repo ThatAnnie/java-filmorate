@@ -60,6 +60,11 @@ public class FilmController {
         return likeService.getPopularFilms(count);
     }
 
+    @DeleteMapping("/{filmId}")
+    public void deleteFilm(@PathVariable Long filmId) {
+        filmService.deleteFilm(filmId);
+    }
+
     @GetMapping("/common")
     public Collection<Film> getCommonFilms(@RequestParam Long userId, @RequestParam Long friendId) {
         return likeService.getCommonFilms(userId, friendId);
