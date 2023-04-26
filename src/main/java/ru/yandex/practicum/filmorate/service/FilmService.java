@@ -41,4 +41,9 @@ public class FilmService {
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", id));
         });
     }
+
+    public Collection<Film> getCommonFilms(Long userId, Long friendId) {
+        log.info("getCommonFilms userId={} friendId={}", userId, friendId);
+        return filmStorage.getCommonFilms(userId, friendId);
+    }
 }
