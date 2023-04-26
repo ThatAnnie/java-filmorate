@@ -132,13 +132,13 @@ public class FilmDbStorage implements FilmStorage {
                 "GROUP BY FILM_ID " +
                 "HAVING COUNT(*) = 2) common ";
 
-        final String sqlFilms = "SELECT fl.film_id " +
+        final String sqlSortedCommon = "SELECT fl.film_id " +
                 "FROM " + sqlCommon +
                 "LEFT JOIN film_like fl ON common.film_id = fl.film_id " +
                 "GROUP BY fl.film_id " +
                 "ORDER BY COUNT(user_id) DESC";
 
-        List<Long> idsOfFilms = jdbcTemplate.queryForList(sqlFilms, Long.class, userId, friendId);
+        List<Long> idsOfFilms = jdbcTemplate.queryForList(sqlSortedCommon, Long.class, userId, friendId);
         List<Film> result     = new ArrayList<>();
         idsOfFilms.forEach((filmId) -> result.add(getById(filmId).get()));
         return result;
