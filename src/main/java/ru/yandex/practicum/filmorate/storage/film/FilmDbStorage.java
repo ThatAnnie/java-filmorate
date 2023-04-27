@@ -123,24 +123,4 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenres(filmGenres);
         return Optional.ofNullable(film);
     }
-
-    @Override
-    public List<Film> getCommonFilms(Long userId, Long friendId) {
-        final String sqlCommon = "(SELECT FILM_ID " +
-                "FROM FILM_LIKE " +
-                "WHERE user_id IN (?,?)" +
-                "GROUP BY FILM_ID " +
-                "HAVING COUNT(*) = 2) common ";
-
-        final String sqlSortedCommon = "SELECT fl.film_id " +
-                "FROM " + sqlCommon +
-                "LEFT JOIN film_like fl ON common.film_id = fl.film_id " +
-                "GROUP BY fl.film_id " +
-                "ORDER BY COUNT(user_id) DESC";
-
-        List<Long> idsOfFilms = jdbcTemplate.queryForList(sqlSortedCommon, Long.class, userId, friendId);
-        List<Film> result     = new ArrayList<>();
-        idsOfFilms.forEach((filmId) -> result.add(getById(filmId).get()));
-        return result;
-    }
 }

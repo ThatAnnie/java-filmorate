@@ -414,7 +414,7 @@ public class FilmorateApplicationTests {
         likeDbStorage.addLike(filmDB3.getId(), userDB2.getId());
         likeDbStorage.addLike(filmDB3.getId(), userDB4.getId());
 
-        List<Film> commonFilms = filmDbStorage.getCommonFilms(userDB2.getId(), userDB4.getId());
+        List<Film> commonFilms = likeDbStorage.getCommonFilms(userDB2.getId(), userDB4.getId());
         assertThat(commonFilms.size()).isEqualTo(2);
         assertThat(commonFilms.contains(filmDB1)).isTrue();
         assertThat(commonFilms.contains(filmDB3)).isTrue();
