@@ -125,7 +125,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Collection<Film> getCommonFilms(Long userId, Long friendId) {
+    public List<Film> getCommonFilms(Long userId, Long friendId) {
         final String sqlCommon = "(SELECT FILM_ID " +
                 "FROM FILM_LIKE " +
                 "WHERE user_id IN (?,?)" +

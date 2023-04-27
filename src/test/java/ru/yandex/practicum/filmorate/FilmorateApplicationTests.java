@@ -355,4 +355,69 @@ public class FilmorateApplicationTests {
         assertThat(friends.size()).isEqualTo(1);
         assertThat(friends.contains(userDB3)).isTrue();
     }
+
+    @Test
+    void testCommonFilms() {
+        User user2 = new User();
+        user2.setName("UserName2");
+        user2.setLogin("login2");
+        user2.setEmail("test2@test.ru");
+        user2.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB2 = userDbStorage.save(user2);
+
+        User user3 = new User();
+        user3.setName("UserName3");
+        user3.setLogin("login3");
+        user3.setEmail("test3@test.ru");
+        user3.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB3 = userDbStorage.save(user3);
+
+        User user4 = new User();
+        user4.setName("UserName4");
+        user4.setLogin("login4");
+        user4.setEmail("test4@test.ru");
+        user4.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB4 = userDbStorage.save(user4);
+
+        Rating mpa = new Rating(2, "PG");
+        Film film1 = new Film();
+        film1.setName("FilmName1");
+        film1.setDescription("Description1");
+        film1.setDuration(120);
+        film1.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film1.setMpa(mpa);
+        Film filmDB1 = filmDbStorage.save(film1);
+
+        Rating mpa2 = new Rating(1, "G");
+        Film film2 = new Film();
+        film2.setName("FilmName2");
+        film2.setDescription("Description2");
+        film2.setDuration(120);
+        film2.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film2.setMpa(mpa2);
+        Film filmDB2 = filmDbStorage.save(film2);
+
+        Film film3 = new Film();
+        film3.setName("FilmName3");
+        film3.setDescription("Description3");
+        film3.setDuration(120);
+        film3.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film3.setMpa(mpa);
+        Film filmDB3 = filmDbStorage.save(film3);
+
+        likeDbStorage.addLike(filmDB1.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB3.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB4.getId());
+
+        likeDbStorage.addLike(filmDB2.getId(), userDB3.getId());
+
+        likeDbStorage.addLike(filmDB3.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB3.getId(), userDB4.getId());
+
+        List<Film> commonFilms = filmDbStorage.getCommonFilms(userDB2.getId(), userDB4.getId());
+        assertThat(commonFilms.size()).isEqualTo(2);
+        assertThat(commonFilms.contains(filmDB1)).isTrue();
+        assertThat(commonFilms.contains(filmDB3)).isTrue();
+        assertThat((commonFilms).get(0).getName()).isEqualTo("FilmName1");
+    }
 }
