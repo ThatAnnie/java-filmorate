@@ -12,4 +12,6 @@ public interface LikeStorage {
     Collection<Film> getPopularFilms(Integer count);
 
     Collection<Long> getUsersLikesByFilm(Long userId);
+
+    Collection<Film> getSortedFilmByLikesDirector(Long dirId);
 }
