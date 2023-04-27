@@ -5,5 +5,4 @@ import ru.yandex.practicum.filmorate.storage.Storage;
 
 
 public interface UserStorage extends Storage<User> {
-    void deleteUser(Long id);
 }

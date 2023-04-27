@@ -5,5 +5,4 @@ import ru.yandex.practicum.filmorate.storage.Storage;
 
 
 public interface FilmStorage extends Storage<Film> {
-    void deleteFilm(Long id);
 }

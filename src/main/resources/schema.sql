@@ -29,7 +29,7 @@ CREATE TABLE film_genre (
         film_id,genre_id
      ),
 	CONSTRAINT fk_film_genre_film_id FOREIGN KEY(film_id) REFERENCES films (film_id) ON DELETE CASCADE,
-	CONSTRAINT fk_film_genre_genre_id FOREIGN KEY(genre_id) REFERENCES genres (genre_id)
+	CONSTRAINT fk_film_genre_genre_id FOREIGN KEY(genre_id) REFERENCES genres (genre_id) ON DELETE CASCADE
 );
 
 CREATE TABLE users (
