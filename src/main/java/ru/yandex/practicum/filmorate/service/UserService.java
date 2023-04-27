@@ -48,6 +48,10 @@ public class UserService {
 
     public void deleteUser(Long userId) {
         log.info("deleteUser with id={}", userId);
-        userStorage.deleteUser(userId);
+        userStorage.getById(userId).orElseThrow(() -> {
+            log.warn("user with id={} not exist", userId);
+            throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", userId));
+        });
+        userStorage.delete(userId);
     }
 }
