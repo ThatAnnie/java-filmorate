@@ -129,7 +129,6 @@ public class FilmDbStorage implements FilmStorage {
         String sql = "SELECT * FROM films ORDER BY film_id";
         List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
         films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
-        films.stream().forEach((film) -> film.setDirectors(directorDbStorage.getDirectorsByFilmId(film.getId())));
         return films;
     }
 
@@ -146,23 +145,5 @@ public class FilmDbStorage implements FilmStorage {
         Set<Director> directors = directorDbStorage.getDirectorsByFilmId(id);
         film.setDirectors(directors);
         return Optional.ofNullable(film);
-    }
-
-    @Override
-    public Collection<Film> getFilmsByDirId(Long dirId) {
-        String sqlQuery = "SELECT * " +
-                "FROM FILMS f " +
-                "LEFT JOIN FILM_DIRECTOR fd2 ON f.FILM_ID = fd2.FILM_ID " +
-                "WHERE FD2.DIRECTOR_ID = ?";
-        List<Film> films = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeFilm(rs), dirId);
-        films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
-        films.stream().forEach((film) -> film.setDirectors(directorDbStorage.getDirectorsByFilmId(film.getId())));
-        return films;
-    }
-
-    @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM films WHERE film_id = ?";
-        jdbcTemplate.update(sql, id);
     }
 }
