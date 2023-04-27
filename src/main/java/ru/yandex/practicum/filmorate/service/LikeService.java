@@ -55,4 +55,9 @@ public class LikeService {
         log.info("getPopularFilms count={}", count);
         return likeStorage.getPopularFilms(count);
     }
+
+    public Collection<Film> getCommonFilms(Long userId, Long friendId) {
+        log.info("getCommonFilms userId={} friendId={}", userId, friendId);
+        return likeStorage.getCommonFilms(userId, friendId);
+    }
 }
