@@ -3,8 +3,6 @@ package ru.yandex.practicum.filmorate.storage.director;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.Optional;
-
 public interface DirectorStorage extends Storage<Director> {
     void delete(Long id);
 }
