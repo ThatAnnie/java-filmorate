@@ -88,10 +88,10 @@ public class DirectorDbStorage implements DirectorStorage {
         }
     }
 
-    public void deleteDirectorsFromFilm(long film_id, Set<Director> directors) {
+    public void deleteDirectorsFromFilm(long filmId, Set<Director> directors) {
         String sqlQuery = "DELETE FROM film_director WHERE film_id = ? AND director_id = ?";
         for (Director d : directors) {
-            jdbcTemplate.update(sqlQuery, film_id, d.getId());
+            jdbcTemplate.update(sqlQuery, filmId, d.getId());
         }
     }
 }
