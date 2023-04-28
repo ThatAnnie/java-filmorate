@@ -63,16 +63,11 @@ public class DirectorDbStorage implements DirectorStorage {
     }
 
     @Override
-    public Optional<Director> deleteById(Long id) {
-        try {
-            String query = "DELETE FROM film_director WHERE director_id = ?";
-            jdbcTemplate.update(query, id);
-            String sqlQuery = "DELETE FROM directors WHERE director_id = ?";
-            jdbcTemplate.update(sqlQuery, id);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-        return Optional.of(new Director());
+    public void delete(Long id) {
+        String query = "DELETE FROM film_director WHERE director_id = ?";
+        jdbcTemplate.update(query, id);
+        String sqlQuery = "DELETE FROM directors WHERE director_id = ?";
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     public Set<Director> getDirectorsByFilmId(Long id) {

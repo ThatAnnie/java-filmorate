@@ -49,11 +49,12 @@ public class DirectorService {
         }));
     }
 
-    public Optional<Director> deleteDirectorById(Long id) {
+    public void deleteDirectorById(Long id) {
         log.info("getDirectorById with id={}", id);
-        return Optional.ofNullable(directorStorage.deleteById(id).orElseThrow(() -> {
+        Optional.ofNullable(directorStorage.getById(id).orElseThrow(() -> {
             log.warn("director with id={} not exist", id);
             throw new EntityNotExistException(String.format("Director с id=%d не существует.", id));
         }));
+        directorStorage.delete(id);
     }
 }
