@@ -50,4 +50,16 @@ public class FilmService {
         });
         filmStorage.delete(filmId);
     }
+
+    public Collection<Film> getSearchFilms(String query, List<String> by) {
+        if (by.isEmpty()) {
+            log.warn("Отсутствует категория поиска");
+            return null;
+        }
+        if (query.isEmpty()) {
+            log.warn("Отсутствует поисковый запрос");
+            return null;
+        }
+        return filmStorage.getSearchFilms(query, by);
+    }
 }
