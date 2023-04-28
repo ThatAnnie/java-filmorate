@@ -53,7 +53,7 @@ public class LikeDbStorage implements LikeStorage {
 
     @Override
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
-        String sqlQuery ="SELECT f.film_id FROM films f " +
+        String sqlQuery = "SELECT f.film_id FROM films f " +
                 "LEFT JOIN FILM_DIRECTOR fd ON f.FILM_ID = fd.FILM_ID " +
                 "LEFT JOIN film_like fl ON fd.film_id = fl.film_id " +
                 "WHERE fd.DIRECTOR_ID = ? " +
