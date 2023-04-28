@@ -55,4 +55,8 @@ public class LikeService {
         log.info("getPopularFilms count={}", count);
         return likeStorage.getPopularFilms(count);
     }
+
+    public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
+       return likeStorage.getSortedFilmByLikesDirector(dirId);
+    }
 }
