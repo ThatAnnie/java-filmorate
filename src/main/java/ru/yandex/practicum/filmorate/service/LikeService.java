@@ -57,6 +57,6 @@ public class LikeService {
     }
 
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
-       return likeStorage.getSortedFilmByLikesDirector(dirId);
+        return likeStorage.getSortedFilmByLikesDirector(dirId);
     }
 }
