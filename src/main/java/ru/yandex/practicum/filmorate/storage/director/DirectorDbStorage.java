@@ -8,7 +8,10 @@ import ru.yandex.practicum.filmorate.model.Director;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class DirectorDbStorage implements DirectorStorage {
@@ -20,7 +23,7 @@ public class DirectorDbStorage implements DirectorStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Director mapRowForDirector(ResultSet resultSet, int rowNum) throws SQLException {
+    private Director mapRowForDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
                 .id(resultSet.getLong("director_id"))
                 .name(resultSet.getString("dir_name"))
@@ -61,8 +64,6 @@ public class DirectorDbStorage implements DirectorStorage {
 
     @Override
     public void delete(Long id) {
-        String query = "DELETE FROM film_director WHERE director_id = ?";
-        jdbcTemplate.update(query, id);
         String sqlQuery = "DELETE FROM directors WHERE director_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
@@ -72,9 +73,9 @@ public class DirectorDbStorage implements DirectorStorage {
             String sqlQuery = "SELECT * FROM directors d " +
                     "JOIN FILM_DIRECTOR fd ON d.DIRECTOR_ID = FD.DIRECTOR_ID " +
                     "WHERE fd.FILM_ID = ?";
-            return new HashSet<>(jdbcTemplate.query(sqlQuery, this::mapRowForDirector, id));
+            return new LinkedHashSet<>(jdbcTemplate.query(sqlQuery, this::mapRowForDirector, id));
         } catch (EmptyResultDataAccessException e) {
-            return new HashSet<>();
+            return new LinkedHashSet<>();
         }
     }
 
@@ -85,10 +86,8 @@ public class DirectorDbStorage implements DirectorStorage {
         }
     }
 
-    public void deleteDirectorsFromFilm(long filmId, Set<Director> directors) {
-        String sqlQuery = "DELETE FROM film_director WHERE film_id = ? AND director_id = ?";
-        for (Director d : directors) {
-            jdbcTemplate.update(sqlQuery, filmId, d.getId());
-        }
+    public void deleteDirectorsFromFilm(long filmId) {
+        String sqlQuery = "DELETE FROM film_director WHERE film_id = ?";
+        jdbcTemplate.update(sqlQuery, filmId);
     }
 }

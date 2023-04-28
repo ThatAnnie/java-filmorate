@@ -15,7 +15,7 @@ import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,7 +98,7 @@ class DirectorTest {
     public void test_getDirectorsByFilmId() {
         Director director = new Director(1L, "NAME");
         directorDbStorage.save(director);
-        HashSet<Director> directors = new HashSet<>();
+        LinkedHashSet<Director> directors = new LinkedHashSet<>();
         directors.add(director);
         Rating mpa = new Rating(1, "G");
         Film film = new Film();
@@ -118,7 +118,7 @@ class DirectorTest {
     public void addFilmDirectors() {
         Director director = new Director(1L, "NAME");
         directorDbStorage.save(director);
-        HashSet<Director> directors = new HashSet<>();
+        LinkedHashSet<Director> directors = new LinkedHashSet<>();
         directors.add(director);
         Director directorTwo = new Director(2L, "NAME222");
         directorDbStorage.save(directorTwo);
@@ -142,7 +142,7 @@ class DirectorTest {
     public void test_deleteDirectorsFromFilm() {
         Director director = new Director(1L, "NAME");
         directorDbStorage.save(director);
-        HashSet<Director> directors = new HashSet<>();
+        LinkedHashSet<Director> directors = new LinkedHashSet<>();
         directors.add(director);
 
         Rating mpa = new Rating(1, "G");
@@ -158,7 +158,7 @@ class DirectorTest {
         assertThat(directorDbStorage.getDirectorsByFilmId(1L).size()).isEqualTo(1);
         assertThat(directorDbStorage.getDirectorsByFilmId(1L).isEmpty()).isFalse();
 
-        directorDbStorage.deleteDirectorsFromFilm(1L, directors);
+        directorDbStorage.deleteDirectorsFromFilm(1L);
 
         assertThat(directorDbStorage.getDirectorsByFilmId(1L).isEmpty()).isTrue();
     }

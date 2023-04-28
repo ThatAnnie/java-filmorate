@@ -5,19 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class FilmService {
     private final FilmStorage filmStorage;
+    private final DirectorStorage directorStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(FilmStorage filmStorage, DirectorStorage directorStorage) {
         this.filmStorage = filmStorage;
+        this.directorStorage = directorStorage;
     }
 
     public List<Film> getFilms() {
@@ -44,6 +49,10 @@ public class FilmService {
     }
 
     public Collection<Film> getSortedFilmByYear(Long dirId) {
+        directorStorage.getById(dirId).orElseThrow(() -> {
+            log.warn("user with id={} not exist", dirId);
+            throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", dirId));
+        });
         return filmStorage.getFilmsByDirId(dirId).stream()
                 .sorted(Comparator.comparingInt(o -> o.getReleaseDate().getYear()))
                 .collect(Collectors.toList());

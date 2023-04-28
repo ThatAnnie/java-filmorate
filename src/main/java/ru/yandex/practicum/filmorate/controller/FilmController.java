@@ -3,9 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.DirectorService;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.LikeService;
 
@@ -21,13 +19,11 @@ public class FilmController {
 
     private final FilmService filmService;
     private final LikeService likeService;
-    private final DirectorService directorService;
 
     @Autowired
-    public FilmController(FilmService filmService, LikeService likeService, DirectorService directorService) {
+    public FilmController(FilmService filmService, LikeService likeService) {
         this.filmService = filmService;
         this.likeService = likeService;
-        this.directorService = directorService;
     }
 
     @GetMapping
@@ -69,9 +65,6 @@ public class FilmController {
     @GetMapping("/director/{directorId}")
     public Collection<Film> getSortedFilms(@PathVariable Long directorId,
                                            @RequestParam String sortBy) {
-        if (directorService.getDirectorById(directorId).isEmpty()) {
-            throw new EntityNotExistException("directorId is not exist");
-        }
         if (sortBy.equals("year")) {
             return filmService.getSortedFilmByYear(directorId);
         }

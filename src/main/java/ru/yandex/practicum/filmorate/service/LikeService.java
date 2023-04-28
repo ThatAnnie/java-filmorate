@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -17,12 +18,14 @@ public class LikeService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private final LikeStorage likeStorage;
+    private final DirectorStorage directorStorage;
 
     @Autowired
-    public LikeService(FilmStorage filmStorage, UserStorage userStorage, LikeStorage likeStorage) {
+    public LikeService(FilmStorage filmStorage, UserStorage userStorage, LikeStorage likeStorage, DirectorStorage directorStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.likeStorage = likeStorage;
+        this.directorStorage = directorStorage;
     }
 
     public void addLike(Long id, Long userId) {
@@ -57,6 +60,10 @@ public class LikeService {
     }
 
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
+        directorStorage.getById(dirId).orElseThrow(() -> {
+            log.warn("user with id={} not exist", dirId);
+            throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", dirId));
+        });
         return likeStorage.getSortedFilmByLikesDirector(dirId);
     }
 }

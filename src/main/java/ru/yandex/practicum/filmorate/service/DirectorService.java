@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,20 +40,20 @@ public class DirectorService {
         }
     }
 
-    public Optional<Director> getDirectorById(Long id) {
+    public Director getDirectorById(Long id) {
         log.info("getDirectorById with id={}", id);
-        return Optional.ofNullable(directorStorage.getById(id).orElseThrow(() -> {
+        return directorStorage.getById(id).orElseThrow(() -> {
             log.warn("director with id={} not exist", id);
             throw new EntityNotExistException(String.format("Director с id=%d не существует.", id));
-        }));
+        });
     }
 
     public void deleteDirectorById(Long id) {
         log.info("getDirectorById with id={}", id);
-        Optional.ofNullable(directorStorage.getById(id).orElseThrow(() -> {
+        directorStorage.getById(id).orElseThrow(() -> {
             log.warn("director with id={} not exist", id);
             throw new EntityNotExistException(String.format("Director с id=%d не существует.", id));
-        }));
+        });
         directorStorage.delete(id);
     }
 }

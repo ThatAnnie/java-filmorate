@@ -75,5 +75,5 @@ director_id BIGINT NOT NULL,
         film_id,director_id
      ),
 CONSTRAINT fk_film_director_film_id FOREIGN KEY(film_id) REFERENCES films (film_id) ON DELETE CASCADE,
-CONSTRAINT fk_film_director_director_id FOREIGN KEY(director_id) REFERENCES directors (director_id)
+CONSTRAINT fk_film_director_director_id FOREIGN KEY(director_id) REFERENCES directors (director_id) ON DELETE CASCADE
 );

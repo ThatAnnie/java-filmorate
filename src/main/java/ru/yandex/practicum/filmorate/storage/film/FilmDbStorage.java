@@ -78,8 +78,8 @@ public class FilmDbStorage implements FilmStorage {
         }
         if (!film.getDirectors().isEmpty() && film.getDirectors() != null) {
             directorDbStorage.addFilmDirectors(film.getDirectors(), film.getId());
-            Set<Genre> filmGenres = new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()));
-            film.setGenres(filmGenres);
+            Set<Director> filmDirectors = new LinkedHashSet<>(directorDbStorage.getDirectorsByFilmId(film.getId()));
+            film.setDirectors(filmDirectors);
         }
         return film;
     }
@@ -95,7 +95,7 @@ public class FilmDbStorage implements FilmStorage {
             log.warn("removeFilmGenres");
         }
         if (!filmDB.getDirectors().isEmpty()) {
-            directorDbStorage.deleteDirectorsFromFilm(filmDB.getId(), filmDB.getDirectors());
+            directorDbStorage.deleteDirectorsFromFilm(filmDB.getId());
             log.warn("removeFilmDirectors");
         }
         String sql = "UPDATE films SET name = ?, description = ?, duration = ?, release_date = ?, rating_id = ? " +
