@@ -144,6 +144,7 @@ class DirectorTest {
         directorDbStorage.save(director);
         HashSet<Director> directors = new HashSet<>();
         directors.add(director);
+
         Rating mpa = new Rating(1, "G");
         Film film = new Film();
         film.setName("FilmName");
