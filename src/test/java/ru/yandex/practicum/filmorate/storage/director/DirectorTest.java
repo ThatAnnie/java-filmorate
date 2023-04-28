@@ -87,7 +87,7 @@ class DirectorTest {
         assertThat(directorDbStorage.getList().isEmpty()).isFalse();
         assertThat(directorDbStorage.getList().size()).isEqualTo(2);
 
-        directorDbStorage.deleteById(2L);
+        directorDbStorage.delete(2L);
         assertThat(directorDbStorage.getList().isEmpty()).isFalse();
         assertThat(directorDbStorage.getList().size()).isEqualTo(1);
         assertThat(directorDbStorage.getList().get(0).getName()).isEqualTo("name");
