@@ -90,4 +90,10 @@ public class UserDbStorage implements UserStorage {
         }
         return Optional.ofNullable(result.get(0));
     }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM users WHERE user_id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }

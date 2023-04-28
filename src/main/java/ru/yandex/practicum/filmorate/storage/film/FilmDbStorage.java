@@ -123,4 +123,10 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenres(filmGenres);
         return Optional.ofNullable(film);
     }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM films WHERE film_id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
