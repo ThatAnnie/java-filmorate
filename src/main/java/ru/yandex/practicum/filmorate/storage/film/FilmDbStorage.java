@@ -158,5 +158,9 @@ public class FilmDbStorage implements FilmStorage {
         films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
         films.stream().forEach((film) -> film.setDirectors(directorDbStorage.getDirectorsByFilmId(film.getId())));
         return films;
+}
+    public void delete(Long id) {
+        String sql = "DELETE FROM films WHERE film_id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

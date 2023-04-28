@@ -11,4 +11,6 @@ public interface Storage<T> {
     List<T> getList();
 
     Optional<T> getById(Long id);
+
+    void delete(Long id);
 }

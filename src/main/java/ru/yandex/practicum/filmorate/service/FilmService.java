@@ -45,9 +45,18 @@ public class FilmService {
         });
     }
 
+
     public Collection<Film> getSortedFilmByYear(Long dirId) {
         return filmStorage.getFilmsByDirId(dirId).stream()
                 .sorted(Comparator.comparingInt(o -> o.getReleaseDate().getYear()))
                 .collect(Collectors.toList());
+}
+    public void deleteFilm(Long filmId) {
+        log.info("deleteFilm with id={}", filmId);
+        Film film = filmStorage.getById(filmId).orElseThrow(() -> {
+            log.warn("film with id={} not exist", filmId);
+            throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", filmId));
+        });
+        filmStorage.delete(filmId);
     }
 }
