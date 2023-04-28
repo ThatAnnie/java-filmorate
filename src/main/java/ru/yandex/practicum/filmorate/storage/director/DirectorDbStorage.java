@@ -8,10 +8,7 @@ import ru.yandex.practicum.filmorate.model.Director;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class DirectorDbStorage implements DirectorStorage {
