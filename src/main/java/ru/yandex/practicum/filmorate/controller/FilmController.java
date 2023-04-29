@@ -61,17 +61,10 @@ public class FilmController {
         return likeService.getPopularFilms(count);
     }
 
-
     @GetMapping("/director/{directorId}")
     public Collection<Film> getSortedFilms(@PathVariable Long directorId,
                                            @RequestParam String sortBy) {
-        if (sortBy.equals("year")) {
-            return filmService.getSortedFilmByYear(directorId);
-        }
-        if (sortBy.equals("likes")) {
-            return likeService.getSortedFilmByLikesDirector(directorId);
-        }
-        return new ArrayList<>();
+        return filmService.getSortedFilms(directorId, sortBy);
     }
 
     @DeleteMapping("/{filmId}")

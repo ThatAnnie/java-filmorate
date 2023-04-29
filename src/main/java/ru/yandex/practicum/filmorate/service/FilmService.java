@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
 public class FilmService {
     private final FilmStorage filmStorage;
     private final DirectorStorage directorStorage;
+    private final LikeService likeService;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, DirectorStorage directorStorage) {
+    public FilmService(FilmStorage filmStorage, DirectorStorage directorStorage, LikeService likeService) {
         this.filmStorage = filmStorage;
         this.directorStorage = directorStorage;
+        this.likeService = likeService;
     }
 
     public List<Film> getFilms() {
@@ -65,5 +68,16 @@ public class FilmService {
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", filmId));
         });
         filmStorage.delete(filmId);
+    }
+
+    public Collection<Film> getSortedFilms(Long directorId, String sortBy) {
+        if (sortBy.equals("year")) {
+            return getSortedFilmByYear(directorId);
+        } else if (sortBy.equals("likes")) {
+            return likeService.getSortedFilmByLikesDirector(directorId);
+        } else {
+            throw new IllegalArgumentException("Не задан параметр сортировки");
+        }
+
     }
 }
