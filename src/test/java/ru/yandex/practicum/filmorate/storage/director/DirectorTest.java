@@ -99,6 +99,7 @@ class DirectorTest {
         Director director = new Director(1L, "NAME");
         directorDbStorage.save(director);
         LinkedHashSet<Director> directors = new LinkedHashSet<>();
+
         directors.add(director);
         Rating mpa = new Rating(1, "G");
         Film film = new Film();
