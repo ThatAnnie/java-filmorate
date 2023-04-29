@@ -123,6 +123,7 @@ class DirectorTest {
         Director directorTwo = new Director(2L, "NAME222");
         directorDbStorage.save(directorTwo);
         directors.add(directorTwo);
+
         Rating mpa = new Rating(1, "G");
         Film film = new Film();
         film.setName("FilmName");
