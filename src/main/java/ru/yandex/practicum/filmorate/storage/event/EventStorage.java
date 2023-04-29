@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Event;
 import java.util.Collection;
 
 public interface EventStorage {
-    void create(Event event);
+    void createEvent(Event event);
 
-    Collection<Event> getEventsByUserId(Long id);
+    Collection<Event> getUserEvents(Long id);
 }

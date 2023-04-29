@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class Event {
     @NotNull
+    private Long eventId;
+    @NotNull
     private Long timestamp;
     @NotNull
     private Long userId;
@@ -14,8 +16,6 @@ public class Event {
     private EventType eventType;
     @NotNull
     private Operation operation;
-    @NotNull
-    private Long eventId;
     @NotNull
     private Long entityId;
 

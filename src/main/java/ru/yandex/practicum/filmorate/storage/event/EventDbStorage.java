@@ -22,12 +22,12 @@ public class EventDbStorage implements EventStorage{
     }
 
     @Override
-    public void create(Event event) {
+    public void createEvent(Event event) {
         String sqlQuery = "INSERT INTO events (event_timestamp,  user_id, event_type, operation, entity_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"event_id"});
             stmt.setLong(1, event.getTimestamp());
             stmt.setLong(2, event.getUserId());
             stmt.setString(3, event.getEventType().getTitle());
@@ -38,7 +38,7 @@ public class EventDbStorage implements EventStorage{
     }
 
     @Override
-    public Collection<Event> getEventsByUserId(Long id) {
+    public Collection<Event> getUserEvents(Long id) {
         String sql = "SELECT * FROM events ORDER BY event_id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeEvent(rs));
     }
