@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage.like;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface LikeStorage {
     void addLike(Long id, Long userId);
@@ -14,4 +15,7 @@ public interface LikeStorage {
     Collection<Long> getUsersLikesByFilm(Long userId);
 
     Collection<Film> getSortedFilmByLikesDirector(Long dirId);
+
+    List<Film> getCommonFilms(Long userId, Long friendId);
+
 }
