@@ -2,27 +2,27 @@ package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.friendship.FriendshipDbStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
+import ru.yandex.practicum.filmorate.storage.review.ReviewStorage;
+import ru.yandex.practicum.filmorate.storage.review.useful.UsefulStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -34,6 +34,8 @@ public class FilmorateApplicationTests {
     private final RatingDbStorage ratingDbStorage;
     private final LikeDbStorage likeDbStorage;
     private final FriendshipDbStorage friendshipDbStorage;
+    private final ReviewStorage reviewStorage;
+    private final UsefulStorage usefulStorage;
     private final JdbcTemplate jdbcTemplate;
 
     @AfterEach
@@ -354,5 +356,162 @@ public class FilmorateApplicationTests {
         List<User> friends = friendshipDbStorage.getCommonFriends(id1, id2);
         assertThat(friends.size()).isEqualTo(1);
         assertThat(friends.contains(userDB3)).isTrue();
+    }
+
+    @Test
+    void testSaveAndGetByIdReview() {
+        User user = new User();
+        user.setName("UserName");
+        user.setLogin("login");
+        user.setEmail("test@test.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB = userDbStorage.save(user);
+
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
+        film.setName("FilmName4");
+        film.setDescription("Description4");
+        film.setDuration(120);
+        film.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film.setMpa(mpa);
+        Film filmDB = filmDbStorage.save(film);
+
+        Review review = new Review();
+        review.setContent("It's good film");
+        review.setIsPositive(true);
+        review.setUserId(userDB.getId());
+        review.setFilmId(filmDB.getId());
+        review.setUseful(0L);
+
+        Review reviewDB = reviewStorage.save(review);
+        Long id = reviewDB.getReviewId();
+        Review reviewCheck = reviewStorage.getById(id).get();
+
+        Assertions.assertEquals(reviewDB, reviewCheck);
+    }
+
+    @Test
+    void testUpdateReview() {
+        User user = new User();
+        user.setName("UserName");
+        user.setLogin("login");
+        user.setEmail("test@test.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB = userDbStorage.save(user);
+
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
+        film.setName("FilmName4");
+        film.setDescription("Description4");
+        film.setDuration(120);
+        film.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film.setMpa(mpa);
+        Film filmDB = filmDbStorage.save(film);
+
+        Review review = new Review();
+        review.setContent("It's good film");
+        review.setIsPositive(true);
+        review.setUserId(userDB.getId());
+        review.setFilmId(filmDB.getId());
+        review.setUseful(0L);
+        Review reviewDB = reviewStorage.save(review);
+        Long id = reviewDB.getReviewId();
+
+        Review reviewUpdate = new Review();
+        reviewUpdate.setReviewId(id);
+        reviewUpdate.setContent("It's bad film");
+        reviewUpdate.setIsPositive(false);
+        reviewUpdate.setUserId(userDB.getId());
+        reviewUpdate.setFilmId(filmDB.getId());
+        reviewUpdate.setUseful(0L);
+
+        reviewStorage.update(reviewUpdate);
+        Review reviewCheck = reviewStorage.getById(id).get();
+
+        Assertions.assertEquals(reviewUpdate, reviewCheck);
+    }
+
+    @Test
+    void testGetListReviews() {
+        User user = new User();
+        user.setName("UserName");
+        user.setLogin("login");
+        user.setEmail("test@test.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB1 = userDbStorage.save(user);
+
+        User user2 = new User();
+        user.setName("UserName2");
+        user.setLogin("login2");
+        user.setEmail("test2@test2.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 2));
+        User userDB2 = userDbStorage.save(user);
+
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
+        film.setName("FilmName4");
+        film.setDescription("Description4");
+        film.setDuration(120);
+        film.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film.setMpa(mpa);
+        Film filmDB = filmDbStorage.save(film);
+
+        Review review = new Review();
+        review.setContent("It's good film");
+        review.setIsPositive(true);
+        review.setUserId(userDB1.getId());
+        review.setFilmId(filmDB.getId());
+        review.setUseful(0L);
+        reviewStorage.save(review);
+
+        Review review2 = new Review();
+        review2.setContent("It's bad film");
+        review2.setIsPositive(false);
+        review2.setUserId(userDB2.getId());
+        review2.setFilmId(filmDB.getId());
+        review2.setUseful(0L);
+        reviewStorage.save(review2);
+
+        List<Review> reviews = reviewStorage.getList();
+        assertThat(reviews.size()).isEqualTo(2);
+    }
+
+    @Test
+    void testAddLikeDeleteLikeToReview() {
+        User user = new User();
+        user.setName("UserName");
+        user.setLogin("login");
+        user.setEmail("test@test.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB = userDbStorage.save(user);
+        Long userId = userDB.getId();
+
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
+        film.setName("FilmName4");
+        film.setDescription("Description4");
+        film.setDuration(120);
+        film.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film.setMpa(mpa);
+        Film filmDB = filmDbStorage.save(film);
+
+        Review review = new Review();
+        review.setContent("It's good film");
+        review.setIsPositive(true);
+        review.setUserId(userDB.getId());
+        review.setFilmId(filmDB.getId());
+        review.setUseful(0L);
+        Review reviewDB = reviewStorage.save(review);
+        Long id = reviewDB.getReviewId();
+
+        usefulStorage.addLike(id, userId);
+        Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 1);
+        usefulStorage.deleteLike(id, userId);
+        Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 0);
+
+        usefulStorage.addDislike(id, userId);
+        Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), -1);
+        usefulStorage.deleteDislike(id, userId);
+        Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 0);
     }
 }
