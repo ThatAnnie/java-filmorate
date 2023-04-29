@@ -36,7 +36,7 @@ public class ReviewService {
 
     public void deleteReview(Long id) {
         log.info("delete review with id {} ", id);
-        reviewStorage.deleteReview(id);
+        reviewStorage.delete(id);
     }
 
     public List<Review> getReviewsWithParam(long filmId, int count) {
