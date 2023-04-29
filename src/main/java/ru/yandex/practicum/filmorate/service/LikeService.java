@@ -61,8 +61,8 @@ public class LikeService {
 
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
         directorStorage.getById(dirId).orElseThrow(() -> {
-            log.warn("user with id={} not exist", dirId);
-            throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", dirId));
+            log.warn("director with id={} not exist", dirId);
+            throw new EntityNotExistException(String.format("Режиссер с id=%d не существует.", dirId));
         });
         return likeStorage.getSortedFilmByLikesDirector(dirId);
     }
