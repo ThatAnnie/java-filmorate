@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.LikeService;
 
 import javax.validation.Valid;
@@ -58,6 +58,12 @@ public class FilmController {
     @GetMapping("/popular")
     public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
         return likeService.getPopularFilms(count);
+    }
+
+    @GetMapping("/director/{directorId}")
+    public Collection<Film> getSortedFilms(@PathVariable Long directorId,
+                                           @RequestParam String sortBy) {
+        return filmService.getSortedFilms(directorId, sortBy);
     }
 
     @DeleteMapping("/{filmId}")

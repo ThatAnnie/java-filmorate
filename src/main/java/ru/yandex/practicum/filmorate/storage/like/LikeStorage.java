@@ -14,5 +14,8 @@ public interface LikeStorage {
 
     Collection<Long> getUsersLikesByFilm(Long userId);
 
+    Collection<Film> getSortedFilmByLikesDirector(Long dirId);
+
     List<Film> getCommonFilms(Long userId, Long friendId);
+
 }

@@ -52,6 +52,18 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
+    public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
+        String sqlQuery = "SELECT f.film_id FROM films f " +
+                "LEFT JOIN FILM_DIRECTOR fd ON f.FILM_ID = fd.FILM_ID " +
+                "LEFT JOIN film_like fl ON fd.film_id = fl.film_id " +
+                "WHERE fd.DIRECTOR_ID = ? " +
+                "GROUP BY f.FILM_ID  ORDER BY COUNT(director_id) DESC";
+        List<Long> result = jdbcTemplate.queryForList(sqlQuery, Long.class, dirId);
+        List<Film> dirFilmsSortedByLikes = new ArrayList<>();
+        result.forEach((filmId) -> dirFilmsSortedByLikes.add(filmDbStorage.getById(filmId).get()));
+        return dirFilmsSortedByLikes;
+}
+
     public List<Film> getCommonFilms(Long userId, Long friendId) {
         final String sqlCommon = "(SELECT FILM_ID " +
                 "FROM FILM_LIKE " +
