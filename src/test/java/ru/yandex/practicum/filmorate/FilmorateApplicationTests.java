@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.storage.director.DirectorDbStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.friendship.FriendshipDbStorage;
 import ru.yandex.practicum.filmorate.storage.genre.GenreDbStorage;
@@ -21,9 +19,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -35,6 +31,7 @@ public class FilmorateApplicationTests {
     private final RatingDbStorage     ratingDbStorage;
     private final LikeDbStorage       likeDbStorage;
     private final FriendshipDbStorage friendshipDbStorage;
+    private final DirectorDbStorage directorDbStorage;
     private final JdbcTemplate        jdbcTemplate;
 
     @AfterEach
@@ -488,4 +485,55 @@ public class FilmorateApplicationTests {
         Optional<Genre> genreCheck = genreDbStorage.getById(id);
         assertThat(genreCheck.get().getName()).isEqualTo("Комедия");
     }
+
+    @Test
+    void testGetSearchFilms() {
+        Director director = new Director(1L, "Bob");
+        directorDbStorage.save(director);
+        LinkedHashSet<Director> directors = new LinkedHashSet<>();
+        directors.add(director);
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("Description");
+        film.setDuration(100);
+        film.setReleaseDate(LocalDate.of(2000, 02, 9));
+        film.setMpa(mpa);
+        film.setDirectors(directors);
+        Film filmDB = filmDbStorage.save(film);
+
+        Director director1 = new Director(2L, "NAME");
+        directorDbStorage.save(director1);
+        LinkedHashSet<Director> directors1 = new LinkedHashSet<>();
+        directors1.add(director1);
+        Rating mpa1 = new Rating(1, "G");
+        Film film1 = new Film();
+        film1.setName("FilmNew");
+        film1.setDescription("DescriptionNew");
+        film1.setDuration(100);
+        film1.setReleaseDate(LocalDate.of(2001, 02, 9));
+        film1.setMpa(mpa1);
+        film1.setDirectors(directors1);
+        Film filmDB1 = filmDbStorage.save(film1);
+
+        String query = "aM";
+        List<String> by = new ArrayList<>();
+        by.add("title");
+        by.add("director");
+        Collection<Film> getSearchFilms = filmDbStorage.getSearchFilms(query, by);
+        assertThat(getSearchFilms.size()).isEqualTo(2);
+
+        by.clear();
+        by.add("director");
+        Collection<Film> getSearchFilms1 = filmDbStorage.getSearchFilms(query, by);
+        assertThat(getSearchFilms1.size()).isEqualTo(1);
+        assertThat(getSearchFilms1.contains(film1)).isTrue();
+
+        by.clear();
+        by.add("title");
+        Collection<Film> getSearchFilms2 = filmDbStorage.getSearchFilms(query, by);
+        assertThat(getSearchFilms2.size()).isEqualTo(1);
+        assertThat(getSearchFilms2.contains(film)).isTrue();
+    }
+
 }
