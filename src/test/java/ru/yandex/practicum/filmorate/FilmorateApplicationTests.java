@@ -40,6 +40,8 @@ public class FilmorateApplicationTests {
         jdbcTemplate.update(sql);
         String sql2 = "DELETE FROM users";
         jdbcTemplate.update(sql2);
+        String sql3 = "DELETE FROM directors";
+        jdbcTemplate.update(sql3);
     }
 
     @Test
@@ -489,7 +491,7 @@ public class FilmorateApplicationTests {
 /*    @Test
     void testGetSearchFilms() {
         Director director = new Director(1L, "Bob");
-        directorDbStorage.save(director);
+        directorDbStorage.save(new Director(1L, "Bob"));
         LinkedHashSet<Director> directors = new LinkedHashSet<>();
         directors.add(director);
         Rating mpa = new Rating(1, "G");
