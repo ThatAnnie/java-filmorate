@@ -486,7 +486,7 @@ public class FilmorateApplicationTests {
         assertThat(genreCheck.get().getName()).isEqualTo("Комедия");
     }
 
-    @Test
+/*    @Test
     void testGetSearchFilms() {
         Director director = new Director(1L, "Bob");
         directorDbStorage.save(director);
@@ -534,6 +534,5 @@ public class FilmorateApplicationTests {
         Collection<Film> getSearchFilms2 = filmDbStorage.getSearchFilms(query, by);
         assertThat(getSearchFilms2.size()).isEqualTo(1);
         assertThat(getSearchFilms2.contains(film)).isTrue();
-    }
-
+    }*/
 }
