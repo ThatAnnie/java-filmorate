@@ -38,7 +38,6 @@ public class FilmorateApplicationTests {
     private final RatingDbStorage ratingDbStorage;
     private final LikeDbStorage likeDbStorage;
     private final FriendshipDbStorage friendshipDbStorage;
-    private final DirectorDbStorage directorDbStorage;
     private final JdbcTemplate jdbcTemplate;
 
     @AfterEach
@@ -47,8 +46,6 @@ public class FilmorateApplicationTests {
         jdbcTemplate.update(sql);
         String sql2 = "DELETE FROM users";
         jdbcTemplate.update(sql2);
-        String sql3 = "DELETE FROM directors";
-        jdbcTemplate.update(sql3);
     }
 
     @Test
