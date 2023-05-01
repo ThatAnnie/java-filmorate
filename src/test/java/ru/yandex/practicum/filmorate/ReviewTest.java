@@ -18,7 +18,7 @@ import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import ru.yandex.practicum.filmorate.storage.review.ReviewStorage;
-import ru.yandex.practicum.filmorate.storage.review.useful.UsefulStorage;
+import ru.yandex.practicum.filmorate.storage.review.useful.ReviewGradesStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ public class ReviewTest {
     @Autowired
     private final ReviewStorage reviewStorage;
     @Autowired
-    private final UsefulStorage usefulStorage;
+    private final ReviewGradesStorage reviewGradesStorage;
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
@@ -202,14 +202,14 @@ public class ReviewTest {
         Review reviewDB = reviewStorage.save(review);
         Long id = reviewDB.getReviewId();
 
-        usefulStorage.addLike(id, userId);
+        reviewGradesStorage.addLike(id, userId);
         Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 1);
-        usefulStorage.deleteLike(id, userId);
+        reviewGradesStorage.deleteLike(id, userId);
         Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 0);
 
-        usefulStorage.addDislike(id, userId);
+        reviewGradesStorage.addDislike(id, userId);
         Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), -1);
-        usefulStorage.deleteDislike(id, userId);
+        reviewGradesStorage.deleteDislike(id, userId);
         Assertions.assertEquals(reviewStorage.getById(id).get().getUseful(), 0);
     }
 }

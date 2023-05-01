@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.review.useful;
 
-public interface UsefulStorage {
+public interface ReviewGradesStorage {
     void addLike(long id, long userId);
 
     void deleteLike(Long id, Long userId);

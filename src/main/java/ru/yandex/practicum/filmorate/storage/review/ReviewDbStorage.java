@@ -36,7 +36,7 @@ public class ReviewDbStorage implements ReviewStorage {
         Review review = new Review();
         review.setReviewId(rs.getLong("review_id"));
         review.setContent(rs.getString("content"));
-        review.setIsPositive(rs.getBoolean("is_Positive"));
+        review.setIsPositive(rs.getBoolean("is_positive"));
         review.setUserId(rs.getLong("user_id"));
         review.setFilmId(rs.getLong("film_id"));
         review.setUseful(rs.getLong("useful"));
@@ -54,7 +54,7 @@ public class ReviewDbStorage implements ReviewStorage {
             throw new EntityNotExistException(String.format("Фильм с id=%d не существует.", review.getFilmId()));
         }
 
-        String sqlQuery = "INSERT INTO reviews (content, is_Positive, user_id, film_id) " +
+        String sqlQuery = "INSERT INTO reviews (content, is_positive, user_id, film_id) " +
                 "VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -77,7 +77,7 @@ public class ReviewDbStorage implements ReviewStorage {
             throw new EntityNotExistException(String.format("Отзыва с id=%d не существует.", review.getReviewId()));
         });
 
-        String sql = "UPDATE reviews SET content = ?, is_Positive = ? WHERE review_id = ?";
+        String sql = "UPDATE reviews SET content = ?, is_positive = ? WHERE review_id = ?";
         jdbcTemplate.update(sql,
                 review.getContent(),
                 review.getIsPositive(),
