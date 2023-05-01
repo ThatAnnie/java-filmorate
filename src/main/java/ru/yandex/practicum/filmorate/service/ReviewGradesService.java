@@ -7,12 +7,12 @@ import ru.yandex.practicum.filmorate.storage.review.useful.ReviewGradesStorage;
 
 @Service
 @Slf4j
-public class ReviewUsefulService {
+public class ReviewGradesService {
 
     ReviewGradesStorage reviewGradesStorage;
 
     @Autowired
-    public ReviewUsefulService(ReviewGradesStorage reviewGradesStorage) {
+    public ReviewGradesService(ReviewGradesStorage reviewGradesStorage) {
         this.reviewGradesStorage = reviewGradesStorage;
     }
 

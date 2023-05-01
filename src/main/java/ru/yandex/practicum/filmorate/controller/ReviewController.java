@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.service.ReviewService;
-import ru.yandex.practicum.filmorate.service.ReviewUsefulService;
+import ru.yandex.practicum.filmorate.service.ReviewGradesService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.List;
 public class ReviewController {
 
     ReviewService reviewService;
-    ReviewUsefulService usefulService;
+    ReviewGradesService reviewGradesService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService, ReviewUsefulService usefulService) {
+    public ReviewController(ReviewService reviewService, ReviewGradesService reviewGradesService) {
         this.reviewService = reviewService;
-        this.usefulService = usefulService;
+        this.reviewGradesService = reviewGradesService;
     }
 
     @PostMapping
@@ -50,21 +50,21 @@ public class ReviewController {
 
     @PutMapping("/{id}/like/{userId}")
     public void addLikeToReview(@PathVariable Long id, @PathVariable Long userId) {
-        usefulService.addLikeToReview(id, userId);
+        reviewGradesService.addLikeToReview(id, userId);
     }
 
     @PutMapping("/{id}/dislike/{userId}")
     public void addDislikeToReview(@PathVariable Long id, @PathVariable Long userId) {
-        usefulService.addDislikeToReview(id, userId);
+        reviewGradesService.addDislikeToReview(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLikeFromReview(@PathVariable Long id, @PathVariable Long userId) {
-        usefulService.deleteLikeFromReview(id, userId);
+        reviewGradesService.deleteLikeFromReview(id, userId);
     }
 
     @DeleteMapping("/{id}/dislike/{userId}")
     public void deleteDislikeFromReview(@PathVariable Long id, @PathVariable Long userId) {
-        usefulService.deleteDislikeFromReview(id, userId);
+        reviewGradesService.deleteDislikeFromReview(id, userId);
     }
 }
