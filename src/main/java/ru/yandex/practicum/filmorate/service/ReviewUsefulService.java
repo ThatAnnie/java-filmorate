@@ -3,36 +3,36 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.storage.review.useful.UsefulStorage;
+import ru.yandex.practicum.filmorate.storage.review.useful.ReviewGradesStorage;
 
 @Service
 @Slf4j
 public class ReviewUsefulService {
 
-    UsefulStorage usefulStorage;
+    ReviewGradesStorage reviewGradesStorage;
 
     @Autowired
-    public ReviewUsefulService(UsefulStorage usefulStorage) {
-        this.usefulStorage = usefulStorage;
+    public ReviewUsefulService(ReviewGradesStorage reviewGradesStorage) {
+        this.reviewGradesStorage = reviewGradesStorage;
     }
 
     public void addLikeToReview(long id, long userId) {
         log.info("User {} add like to review {}", userId, id);
-        usefulStorage.addLike(id, userId);
+        reviewGradesStorage.addLike(id, userId);
     }
 
     public void deleteLikeFromReview(long id, long userId) {
         log.info("User {} delete like from review {}", userId, id);
-        usefulStorage.deleteLike(id, userId);
+        reviewGradesStorage.deleteLike(id, userId);
     }
 
     public void addDislikeToReview(long id, long userId) {
         log.info("User {} add dislike to review {}", userId, id);
-        usefulStorage.addDislike(id, userId);
+        reviewGradesStorage.addDislike(id, userId);
     }
 
     public void deleteDislikeFromReview(long id, long userId) {
         log.info("User {} delete dislike from review {}", userId, id);
-        usefulStorage.deleteDislike(id, userId);
+        reviewGradesStorage.deleteDislike(id, userId);
     }
 }

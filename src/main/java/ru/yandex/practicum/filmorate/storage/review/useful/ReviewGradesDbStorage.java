@@ -10,14 +10,14 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 @Component
 @Slf4j
-public class UsefulDbStorage implements UsefulStorage {
+public class ReviewGradesDbStorage implements ReviewGradesStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserStorage userStorage;
     private final ReviewStorage reviewStorage;
 
     @Autowired
-    public UsefulDbStorage(JdbcTemplate jdbcTemplate, UserStorage userStorage, ReviewStorage reviewStorage) {
+    public ReviewGradesDbStorage(JdbcTemplate jdbcTemplate, UserStorage userStorage, ReviewStorage reviewStorage) {
         this.jdbcTemplate = jdbcTemplate;
         this.userStorage = userStorage;
         this.reviewStorage = reviewStorage;
@@ -44,7 +44,7 @@ public class UsefulDbStorage implements UsefulStorage {
     @Override
     public void addLike(long id, long userId) {
         isExist(id, userId);
-        String sql = "INSERT INTO useful (review_id, user_id, useful_estimation) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO review_grades (review_id, user_id, is_useful) VALUES(?, ?, ?)";
         jdbcTemplate.update(sql, id, userId, true);
         updateUseful(id, 1);
     }
@@ -52,7 +52,7 @@ public class UsefulDbStorage implements UsefulStorage {
     @Override
     public void deleteLike(Long id, Long userId) {
         isExist(id, userId);
-        String sql = "DELETE FROM useful WHERE review_id = ? AND user_id = ?";
+        String sql = "DELETE FROM review_grades WHERE review_id = ? AND user_id = ?";
         jdbcTemplate.update(sql, id, userId);
         updateUseful(id, -1);
     }
@@ -60,7 +60,7 @@ public class UsefulDbStorage implements UsefulStorage {
     @Override
     public void addDislike(long id, long userId) {
         isExist(id, userId);
-        String sql = "INSERT INTO useful (review_id, user_id, useful_estimation) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO review_grades (review_id, user_id, is_useful) VALUES(?, ?, ?)";
         jdbcTemplate.update(sql, id, userId, false);
         updateUseful(id, -1);
     }
@@ -68,7 +68,7 @@ public class UsefulDbStorage implements UsefulStorage {
     @Override
     public void deleteDislike(Long id, Long userId) {
         isExist(id, userId);
-        String sql = "DELETE FROM useful WHERE review_id = ? AND user_id = ?";
+        String sql = "DELETE FROM review_grades WHERE review_id = ? AND user_id = ?";
         jdbcTemplate.update(sql, id, userId);
         updateUseful(id, 1);
     }
