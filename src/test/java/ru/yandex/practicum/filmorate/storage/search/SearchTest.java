@@ -40,17 +40,18 @@ class SearchTest {
         by.add("title");
         by.add("director");
         Collection<Film> getSearchFilms = filmDbStorage.getSearchFilms(query, by);
-        System.out.println(getSearchFilms);
         assertThat(getSearchFilms.size()).isEqualTo(2);
 
         by.clear();
         by.add("director");
-        Collection<Film> getSearchFilms1 = filmDbStorage.getSearchFilms(query, by);
+        List<Film> getSearchFilms1 = new ArrayList<>(filmDbStorage.getSearchFilms(query, by));
         assertThat(getSearchFilms1.size()).isEqualTo(1);
+        assertThat(getSearchFilms1.get(0).getName()).isEqualTo("НовыйПродукт");
 
         by.clear();
         by.add("title");
-        Collection<Film> getSearchFilms2 = filmDbStorage.getSearchFilms(query, by);
+        List<Film> getSearchFilms2 = new ArrayList<>(filmDbStorage.getSearchFilms(query, by));
         assertThat(getSearchFilms2.size()).isEqualTo(1);
+        assertThat(getSearchFilms2.get(0).getName()).isEqualTo("Фильма111");
     }
 }
