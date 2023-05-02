@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.storage.review.grades.ReviewGradesStorage;
 @Slf4j
 public class ReviewGradesService {
 
-    ReviewGradesStorage reviewGradesStorage;
+    private final ReviewGradesStorage reviewGradesStorage;
 
     @Autowired
     public ReviewGradesService(ReviewGradesStorage reviewGradesStorage) {

@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/reviews")
 public class ReviewController {
 
-    ReviewService reviewService;
-    ReviewGradesService reviewGradesService;
+    private final ReviewService reviewService;
+    private final ReviewGradesService reviewGradesService;
 
     @Autowired
     public ReviewController(ReviewService reviewService, ReviewGradesService reviewGradesService) {

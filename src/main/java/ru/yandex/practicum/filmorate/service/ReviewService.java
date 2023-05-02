@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 public class ReviewService {
 
-    ReviewStorage reviewStorage;
+    private final ReviewStorage reviewStorage;
 
     @Autowired
     public ReviewService(ReviewStorage reviewStorage) {
