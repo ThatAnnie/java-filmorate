@@ -165,4 +165,35 @@ public class FilmDbStorage implements FilmStorage {
         String sql = "DELETE FROM films WHERE film_id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    @Override
+    public List<Film> getSearchFilms(String query, List<String> by) {
+        if (by.size() == 2) {
+            String sql = "SELECT f.*, COUNT(user_id) " +
+                    "FROM films f LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
+                    "LEFT JOIN film_director fd ON f.film_id = fd.film_id " +
+                    "LEFT JOIN directors d ON fd.director_id = d.director_id " +
+                    "WHERE lower(d.dir_name) LIKE lower(concat('%',?,'%')) OR lower(f.name) LIKE lower(concat('%',?,'%')) " +
+                    "GROUP BY f.film_id ORDER BY COUNT(user_id) DESC";
+            List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), query, query);
+            films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
+            return films;
+        }
+        if (by.contains("title")) {
+            String sql = "SELECT f.film_id, f.name, f.description, f.duration, f.release_date, f.rating_id, COUNT(user_id) " +
+                    "FROM films f LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
+                    "WHERE lower(name) LIKE lower(concat('%',?,'%')) GROUP BY f.film_id ORDER BY COUNT(user_id) DESC";
+            List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), query);
+            films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
+            return films;
+        }
+        String sql = "SELECT f.*, COUNT(user_id) " +
+                "FROM films f LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
+                "LEFT JOIN film_director fd ON f.film_id = fd.film_id " +
+                "LEFT JOIN directors d ON fd.director_id = d.director_id " +
+                "WHERE lower(d.dir_name) LIKE lower(concat('%',?,'%')) GROUP BY f.film_id ORDER BY COUNT(user_id) DESC";
+        List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), query);
+        films.stream().forEach((film) -> film.setGenres(new LinkedHashSet<>(genreStorage.getGenresByFilmId(film.getId()))));
+        return films;
+    }
 }

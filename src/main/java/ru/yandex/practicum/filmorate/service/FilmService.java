@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -78,5 +79,28 @@ public class FilmService {
             throw new IllegalArgumentException("Не задан параметр сортировки");
         }
 
+    }
+
+    public Collection<Film> getSearchFilms(String query, List<String> by) {
+        if (by.isEmpty()) {
+            log.warn("Отсутствует категория поиска");
+            throw new EntityNotExistException("Отсутствует категория поиска");
+        }
+        if (by.size() > 2) {
+            log.warn("В категории поиска более двух значений");
+            throw new EntityNotExistException("В категории поиска более двух значений");
+        }
+        List<String> test = new ArrayList<>();
+        test.add("title");
+        test.add("director");
+        if ((by.size() == 2) && !by.containsAll(test)) {
+            log.warn("В категории поиска неверные параметры");
+            throw new EntityNotExistException("В категории поиска неверные параметры");
+        }
+        if (query.isEmpty()) {
+            log.warn("Отсутствует поисковый запрос");
+            throw new EntityNotExistException("Отсутствует поисковый запрос");
+        }
+        return filmStorage.getSearchFilms(query, by);
     }
 }

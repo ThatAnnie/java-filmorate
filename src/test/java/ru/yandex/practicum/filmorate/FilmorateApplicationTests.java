@@ -18,24 +18,24 @@ import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmorateApplicationTests {
-    private final UserDbStorage       userDbStorage;
-    private final FilmDbStorage       filmDbStorage;
-    private final GenreDbStorage      genreDbStorage;
-    private final RatingDbStorage     ratingDbStorage;
-    private final LikeDbStorage       likeDbStorage;
+    private final UserDbStorage userDbStorage;
+    private final FilmDbStorage filmDbStorage;
+    private final GenreDbStorage genreDbStorage;
+    private final RatingDbStorage ratingDbStorage;
+    private final LikeDbStorage likeDbStorage;
     private final FriendshipDbStorage friendshipDbStorage;
-    private final JdbcTemplate        jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @AfterEach
     void deleteFilmsFromDB() {
@@ -73,15 +73,15 @@ public class FilmorateApplicationTests {
 
     @Test
     void testSaveFilm() {
-        Rating mpa  = new Rating(1, "G");
-        Film   film = new Film();
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
         film.setName("FilmName");
         film.setDescription("Description");
         film.setDuration(100);
         film.setReleaseDate(LocalDate.of(2000, 02, 9));
         film.setMpa(mpa);
-        Film filmDB    = filmDbStorage.save(film);
-        Long id        = filmDB.getId();
+        Film filmDB = filmDbStorage.save(film);
+        Long id = filmDB.getId();
         Film filmCheck = filmDbStorage.getById(id).get();
         assertThat(filmCheck.getName()).isEqualTo("FilmName");
         assertThat(filmCheck.getDescription()).isEqualTo("Description");
@@ -91,15 +91,15 @@ public class FilmorateApplicationTests {
 
     @Test
     void testUpdateFilm() {
-        Rating mpa  = new Rating(1, "G");
-        Film   film = new Film();
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
         film.setName("FilmName2");
         film.setDescription("Description2");
         film.setDuration(100);
         film.setReleaseDate(LocalDate.of(2003, 02, 9));
         film.setMpa(mpa);
-        Film filmDB     = filmDbStorage.save(film);
-        Long id         = filmDB.getId();
+        Film filmDB = filmDbStorage.save(film);
+        Long id = filmDB.getId();
         Film filmUpdate = new Film();
         filmUpdate.setName("FilmName2");
         filmUpdate.setDescription("DescriptionNew2");
@@ -118,8 +118,8 @@ public class FilmorateApplicationTests {
 
     @Test
     void testGetListFilms() {
-        Rating mpa  = new Rating(1, "G");
-        Film   film = new Film();
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
         film.setName("FilmName2");
         film.setDescription("Description2");
         film.setDuration(100);
@@ -139,15 +139,15 @@ public class FilmorateApplicationTests {
 
     @Test
     void testGetByIdFilm() {
-        Rating mpa  = new Rating(2, "PG");
-        Film   film = new Film();
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
         film.setName("FilmName3");
         film.setDescription("Description3");
         film.setDuration(120);
         film.setReleaseDate(LocalDate.of(2010, 02, 9));
         film.setMpa(mpa);
-        Film filmDB    = filmDbStorage.save(film);
-        Long id        = filmDB.getId();
+        Film filmDB = filmDbStorage.save(film);
+        Long id = filmDB.getId();
         Film filmCheck = filmDbStorage.getById(id).get();
         assertThat(filmCheck.getName()).isEqualTo("FilmName3");
         assertThat(filmCheck.getDescription()).isEqualTo("Description3");
@@ -162,9 +162,9 @@ public class FilmorateApplicationTests {
         user.setLogin("login");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
-        User   userDB = userDbStorage.save(user);
-        Rating mpa    = new Rating(2, "PG");
-        Film   film   = new Film();
+        User userDB = userDbStorage.save(user);
+        Rating mpa = new Rating(2, "PG");
+        Film film = new Film();
         film.setName("FilmName4");
         film.setDescription("Description4");
         film.setDuration(120);
@@ -185,35 +185,35 @@ public class FilmorateApplicationTests {
         user2.setEmail("test2@test.ru");
         user2.setBirthday(LocalDate.of(1990, 03, 9));
         User userDB2 = userDbStorage.save(user2);
-        User user3   = new User();
+        User user3 = new User();
         user3.setName("UserName3");
         user3.setLogin("login3");
         user3.setEmail("test3@test.ru");
         user3.setBirthday(LocalDate.of(1990, 03, 9));
         User userDB3 = userDbStorage.save(user3);
-        User user4   = new User();
+        User user4 = new User();
         user4.setName("UserName4");
         user4.setLogin("login4");
         user4.setEmail("test4@test.ru");
         user4.setBirthday(LocalDate.of(1990, 03, 9));
-        User   userDB4 = userDbStorage.save(user4);
-        Rating mpa     = new Rating(2, "PG");
-        Film   film1   = new Film();
+        User userDB4 = userDbStorage.save(user4);
+        Rating mpa = new Rating(2, "PG");
+        Film film1 = new Film();
         film1.setName("FilmName1");
         film1.setDescription("Description1");
         film1.setDuration(120);
         film1.setReleaseDate(LocalDate.of(2010, 02, 9));
         film1.setMpa(mpa);
-        Film   filmDB1 = filmDbStorage.save(film1);
-        Rating mpa2    = new Rating(1, "G");
-        Film   film2   = new Film();
+        Film filmDB1 = filmDbStorage.save(film1);
+        Rating mpa2 = new Rating(1, "G");
+        Film film2 = new Film();
         film2.setName("FilmName2");
         film2.setDescription("Description2");
         film2.setDuration(120);
         film2.setReleaseDate(LocalDate.of(2010, 02, 9));
         film2.setMpa(mpa2);
         Film filmDB2 = filmDbStorage.save(film2);
-        Film film3   = new Film();
+        Film film3 = new Film();
         film3.setName("FilmName3");
         film3.setDescription("Description3");
         film3.setDuration(120);
@@ -239,8 +239,8 @@ public class FilmorateApplicationTests {
         user.setLogin("login");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
-        User userDB    = userDbStorage.save(user);
-        Long id        = userDB.getId();
+        User userDB = userDbStorage.save(user);
+        Long id = userDB.getId();
         User userCheck = userDbStorage.getById(id).get();
         assertThat(userCheck.getName()).isEqualTo("UserName");
         assertThat(userCheck.getLogin()).isEqualTo("login");
@@ -254,8 +254,8 @@ public class FilmorateApplicationTests {
         user.setLogin("login");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
-        User userDB     = userDbStorage.save(user);
-        Long id         = userDB.getId();
+        User userDB = userDbStorage.save(user);
+        Long id = userDB.getId();
         User userUpdate = new User();
         userUpdate.setName("UserNameNew");
         userUpdate.setLogin("login");
@@ -293,8 +293,8 @@ public class FilmorateApplicationTests {
         user.setLogin("login");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
-        User userDB    = userDbStorage.save(user);
-        Long id        = userDB.getId();
+        User userDB = userDbStorage.save(user);
+        Long id = userDB.getId();
         User userCheck = userDbStorage.getById(id).get();
         assertThat(userCheck.getName()).isEqualTo("UserName");
         assertThat(userCheck.getLogin()).isEqualTo("login");
@@ -309,14 +309,14 @@ public class FilmorateApplicationTests {
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
         User userDB = userDbStorage.save(user);
-        Long id1    = userDB.getId();
-        User user2  = new User();
+        Long id1 = userDB.getId();
+        User user2 = new User();
         user2.setName("UserName2");
         user2.setLogin("login2");
         user2.setEmail("test2@test.ru");
         user2.setBirthday(LocalDate.of(1994, 03, 9));
         User userDB2 = userDbStorage.save(user2);
-        Long id2     = userDB2.getId();
+        Long id2 = userDB2.getId();
         friendshipDbStorage.addFriend(id1, id2);
         List<User> friends = friendshipDbStorage.getFriends(id1);
         assertThat(friends.size()).isEqualTo(1);
@@ -334,21 +334,21 @@ public class FilmorateApplicationTests {
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
         User userDB = userDbStorage.save(user);
-        Long id1    = userDB.getId();
-        User user2  = new User();
+        Long id1 = userDB.getId();
+        User user2 = new User();
         user2.setName("UserName2");
         user2.setLogin("login2");
         user2.setEmail("test2@test.ru");
         user2.setBirthday(LocalDate.of(1994, 03, 9));
         User userDB2 = userDbStorage.save(user2);
-        Long id2     = userDB2.getId();
-        User user3   = new User();
+        Long id2 = userDB2.getId();
+        User user3 = new User();
         user3.setName("UserName3");
         user3.setLogin("login3");
         user3.setEmail("test3@test.ru");
         user3.setBirthday(LocalDate.of(1995, 03, 9));
         User userDB3 = userDbStorage.save(user3);
-        Long id3     = userDB3.getId();
+        Long id3 = userDB3.getId();
 
         friendshipDbStorage.addFriend(id1, id3);
         friendshipDbStorage.addFriend(id2, id3);
@@ -424,15 +424,15 @@ public class FilmorateApplicationTests {
 
     @Test
     void testSaveFilmDeleteFilm() {
-        Rating mpa  = new Rating(1, "G");
-        Film   film = new Film();
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
         film.setName("FilmName");
         film.setDescription("Description");
         film.setDuration(100);
         film.setReleaseDate(LocalDate.of(2000, 02, 9));
         film.setMpa(mpa);
-        Film filmDB    = filmDbStorage.save(film);
-        Long id        = filmDB.getId();
+        Film filmDB = filmDbStorage.save(film);
+        Long id = filmDB.getId();
         Film filmCheck = filmDbStorage.getById(id).get();
         assertThat(filmCheck.getName()).isEqualTo("FilmName");
         assertThat(filmCheck.getDescription()).isEqualTo("Description");
@@ -451,8 +451,8 @@ public class FilmorateApplicationTests {
         user.setLogin("login");
         user.setEmail("test@test.ru");
         user.setBirthday(LocalDate.of(1990, 03, 9));
-        User userDB    = userDbStorage.save(user);
-        Long id        = userDB.getId();
+        User userDB = userDbStorage.save(user);
+        Long id = userDB.getId();
         User userCheck = userDbStorage.getById(id).get();
         assertThat(userCheck.getName()).isEqualTo("UserName");
         assertThat(userCheck.getLogin()).isEqualTo("login");
