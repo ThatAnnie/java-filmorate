@@ -71,7 +71,7 @@ public class LikeService {
             throw new EntityNotExistException(String.format("Режиссер с id=%d не существует.", dirId));
         });
         return likeStorage.getSortedFilmByLikesDirector(dirId);
-}
+    }
 
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         log.info("getCommonFilms userId={} friendId={}", userId, friendId);

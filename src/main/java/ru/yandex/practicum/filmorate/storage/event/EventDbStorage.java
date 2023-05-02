@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 @Component
-public class EventDbStorage implements EventStorage{
+public class EventDbStorage implements EventStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -39,8 +39,8 @@ public class EventDbStorage implements EventStorage{
 
     @Override
     public Collection<Event> getUserEvents(Long id) {
-        String sql = "SELECT * FROM events ORDER BY event_id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> makeEvent(rs));
+        String sql = "SELECT * FROM events WHERE user_id = ? ORDER BY event_id";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeEvent(rs), id);
     }
 
     private Event makeEvent(ResultSet rs) throws SQLException {

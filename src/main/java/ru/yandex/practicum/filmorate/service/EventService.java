@@ -34,7 +34,7 @@ public class EventService {
         return eventStorage.getUserEvents(id);
     }
 
-    public void createEvent(Long userId, EventType eventType, Operation operation, Long entityId){
+    public void createEvent(Long userId, EventType eventType, Operation operation, Long entityId) {
         Event event = new Event();
         event.setTimestamp(Instant.now().toEpochMilli());
         event.setUserId(userId);

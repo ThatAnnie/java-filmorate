@@ -18,5 +18,4 @@ public class Event {
     private Operation operation;
     @NotNull
     private Long entityId;
-
 }
