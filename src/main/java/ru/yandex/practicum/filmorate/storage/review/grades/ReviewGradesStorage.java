@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.review.useful;
+package ru.yandex.practicum.filmorate.storage.review.grades;
 
 public interface ReviewGradesStorage {
     void addLike(long id, long userId);

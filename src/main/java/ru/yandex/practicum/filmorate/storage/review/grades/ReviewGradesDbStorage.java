@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.review.useful;
+package ru.yandex.practicum.filmorate.storage.review.grades;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
