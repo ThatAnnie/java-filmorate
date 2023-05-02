@@ -39,7 +39,7 @@ public class ReviewService {
         reviewStorage.delete(id);
     }
 
-    public List<Review> getReviewsWithParam(long filmId, int count) {
+    public List<Review> getReviewsWithParam(Long filmId, Integer count) {
         log.info("get reviews with params");
         return reviewStorage.getListWithParam(filmId, count);
     }

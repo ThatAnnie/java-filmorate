@@ -6,5 +6,5 @@ import ru.yandex.practicum.filmorate.storage.Storage;
 import java.util.List;
 
 public interface ReviewStorage extends Storage<Review> {
-    List<Review> getListWithParam(long filmId, int count);
+    List<Review> getListWithParam(Long filmId, Integer count);
 }

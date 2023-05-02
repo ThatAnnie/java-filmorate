@@ -109,8 +109,8 @@ public class ReviewDbStorage implements ReviewStorage {
     }
 
     @Override
-    public List<Review> getListWithParam(long filmId, int count) {
-        if (filmId == 0) {
+    public List<Review> getListWithParam(Long filmId, Integer count) {
+        if (filmId == null) {
             String sql = "SELECT * FROM reviews ORDER BY useful DESC LIMIT ?";
             return jdbcTemplate.query(sql, (rs, rowNum) -> makeReview(rs), count);
         } else {
