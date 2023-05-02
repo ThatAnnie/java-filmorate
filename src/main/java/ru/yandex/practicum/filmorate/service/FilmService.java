@@ -93,7 +93,7 @@ public class FilmService {
         List<String> test = new ArrayList<>();
         test.add("title");
         test.add("director");
-        if ((by.size() == 2) & !by.containsAll(test)) {
+        if ((by.size() == 2) && !by.containsAll(test)) {
             log.warn("В категории поиска неверные параметры");
             throw new EntityNotExistException("В категории поиска неверные параметры");
         }
