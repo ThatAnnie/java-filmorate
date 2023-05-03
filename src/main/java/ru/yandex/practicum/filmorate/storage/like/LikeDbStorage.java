@@ -45,9 +45,9 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public Collection<Long> getUsersLikesByFilm(Long userId) {
+    public Collection<Long> getUsersLikesByFilm(Long filmId) {
         final String sql = "SELECT user_id FROM film_like WHERE film_id = ?";
-        List<Long> users = jdbcTemplate.queryForList(sql, Long.class, userId);
+        List<Long> users = jdbcTemplate.queryForList(sql, Long.class, filmId);
         return users;
     }
 
@@ -62,7 +62,7 @@ public class LikeDbStorage implements LikeStorage {
         List<Film> dirFilmsSortedByLikes = new ArrayList<>();
         result.forEach((filmId) -> dirFilmsSortedByLikes.add(filmDbStorage.getById(filmId).get()));
         return dirFilmsSortedByLikes;
-}
+    }
 
     public List<Film> getCommonFilms(Long userId, Long friendId) {
         final String sqlCommon = "(SELECT FILM_ID " +
@@ -78,8 +78,14 @@ public class LikeDbStorage implements LikeStorage {
                 "ORDER BY COUNT(user_id) DESC";
 
         List<Long> idsOfFilms = jdbcTemplate.queryForList(sqlSortedCommon, Long.class, userId, friendId);
-        List<Film> result     = new ArrayList<>();
+        List<Film> result = new ArrayList<>();
         idsOfFilms.forEach((filmId) -> result.add(filmDbStorage.getById(filmId).get()));
         return result;
+    }
+
+    @Override
+    public Collection<Long> getFilmsLikesByUser(Long userId) {
+        final String sql = "SELECT film_id FROM film_like WHERE user_id = ?";
+        return jdbcTemplate.queryForList(sql, Long.class, userId);
     }
 }

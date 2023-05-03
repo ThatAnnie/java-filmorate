@@ -12,10 +12,11 @@ public interface LikeStorage {
 
     Collection<Film> getPopularFilms(Integer count);
 
-    Collection<Long> getUsersLikesByFilm(Long userId);
+    Collection<Long> getUsersLikesByFilm(Long filmId);
 
     Collection<Film> getSortedFilmByLikesDirector(Long dirId);
 
     List<Film> getCommonFilms(Long userId, Long friendId);
 
+    Collection<Long> getFilmsLikesByUser(Long userId);
 }

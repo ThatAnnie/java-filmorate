@@ -16,7 +16,7 @@ import java.util.Set;
 @Component
 public class DirectorDbStorage implements DirectorStorage {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public DirectorDbStorage(JdbcTemplate jdbcTemplate) {

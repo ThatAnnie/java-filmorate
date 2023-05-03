@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class RatingService {
-    private RatingStorage ratingStorage;
+    private final RatingStorage ratingStorage;
 
     @Autowired
     public RatingService(RatingStorage ratingStorage) {

@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Collection;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -65,10 +65,41 @@ public class LikeService {
             throw new EntityNotExistException(String.format("Режиссер с id=%d не существует.", dirId));
         });
         return likeStorage.getSortedFilmByLikesDirector(dirId);
-}
+    }
 
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         log.info("getCommonFilms userId={} friendId={}", userId, friendId);
         return likeStorage.getCommonFilms(userId, friendId);
     }
+
+    public Collection<Film> getRecommendation(Long userId) {
+        log.info("getRecommendation userId={}", userId);
+
+        Collection<Long> userLikesFilms = likeStorage.getFilmsLikesByUser(userId);
+        HashMap<Long, Collection<Long>> commonLikesMap = new HashMap<>();
+        for (Long filmId : userLikesFilms) {
+            commonLikesMap.put(filmId, likeStorage.getUsersLikesByFilm(filmId));
+        }
+        HashMap<Long, Integer> commonLikesCount = new HashMap<>();
+        for (Collection<Long> cl : commonLikesMap.values()) {
+            for (Long id : cl) {
+                commonLikesCount.put(id, (likeStorage.getCommonFilms(userId, id)).size());
+            }
+        }
+        if (commonLikesCount.size() == 0) {
+            return new ArrayList<>();
+
+        } else {
+            Long recommenderId = Collections.max(commonLikesCount.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+
+            Collection<Long> recommenderLikesFilms = likeStorage.getFilmsLikesByUser(recommenderId);
+            recommenderLikesFilms.removeAll(userLikesFilms);
+            Collection<Film> result = new ArrayList<>();
+            for (Long l : recommenderLikesFilms) {
+                result.add(filmStorage.getById(l).get());
+            }
+            return result;
+        }
+    }
+
 }
