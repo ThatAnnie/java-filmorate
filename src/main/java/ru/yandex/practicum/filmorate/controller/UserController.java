@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.service.EventService;
 import ru.yandex.practicum.filmorate.service.FriendshipService;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -17,11 +19,13 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final FriendshipService friendshipService;
+    private final EventService eventService;
 
     @Autowired
-    public UserController(UserService userService, FriendshipService friendshipService) {
+    public UserController(UserService userService, FriendshipService friendshipService, EventService eventService) {
         this.userService = userService;
         this.friendshipService = friendshipService;
+        this.eventService = eventService;
     }
 
     @GetMapping
@@ -67,5 +71,10 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
+    }
+
+    @GetMapping("/{id}/feed")
+    public Collection<Event> getUserEvents(@PathVariable Long id) {
+        return eventService.getUserEvents(id);
     }
 }
