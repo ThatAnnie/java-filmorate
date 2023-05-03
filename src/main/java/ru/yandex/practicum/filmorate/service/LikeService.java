@@ -54,9 +54,9 @@ public class LikeService {
         likeStorage.deleteLike(id, userId);
     }
 
-    public Collection<Film> getPopularFilms(Integer count) {
+    public Collection<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
         log.info("getPopularFilms count={}", count);
-        return likeStorage.getPopularFilms(count);
+        return likeStorage.getPopularFilms(count, genreId, year);
     }
 
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
@@ -65,7 +65,7 @@ public class LikeService {
             throw new EntityNotExistException(String.format("Режиссер с id=%d не существует.", dirId));
         });
         return likeStorage.getSortedFilmByLikesDirector(dirId);
-}
+    }
 
     public Collection<Film> getCommonFilms(Long userId, Long friendId) {
         log.info("getCommonFilms userId={} friendId={}", userId, friendId);
