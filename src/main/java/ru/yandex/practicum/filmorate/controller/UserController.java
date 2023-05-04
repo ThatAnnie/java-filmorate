@@ -3,9 +3,9 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.service.EventService;
 import ru.yandex.practicum.filmorate.service.FriendshipService;
 import ru.yandex.practicum.filmorate.service.LikeService;
@@ -30,7 +30,7 @@ public class UserController {
     public UserController(UserService userService, FriendshipService friendshipService, LikeService likeService, EventService eventService) {
         this.userService = userService;
         this.friendshipService = friendshipService;
-        this.likeService = likeService; 
+        this.likeService = likeService;
         this.eventService = eventService;
     }
 
@@ -82,6 +82,7 @@ public class UserController {
     @GetMapping("/{id}/recommendations")
     public Collection<Film> getRecommendation(@PathVariable Long id) {
         return likeService.getRecommendation(id);
+    }
 
     @GetMapping("/{id}/feed")
     public Collection<Event> getUserEvents(@PathVariable Long id) {
