@@ -3,10 +3,12 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.EventService;
 import ru.yandex.practicum.filmorate.service.FriendshipService;
+import ru.yandex.practicum.filmorate.service.LikeService;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
@@ -21,10 +23,14 @@ public class UserController {
     private final FriendshipService friendshipService;
     private final EventService eventService;
 
+    private final LikeService likeService;
+
     @Autowired
-    public UserController(UserService userService, FriendshipService friendshipService, EventService eventService) {
+
+    public UserController(UserService userService, FriendshipService friendshipService, LikeService likeService, EventService eventService) {
         this.userService = userService;
         this.friendshipService = friendshipService;
+        this.likeService = likeService;
         this.eventService = eventService;
     }
 
@@ -71,6 +77,11 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public Collection<Film> getRecommendation(@PathVariable Long id) {
+        return likeService.getRecommendation(id);
     }
 
     @GetMapping("/{id}/feed")

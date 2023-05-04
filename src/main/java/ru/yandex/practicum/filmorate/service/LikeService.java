@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityNotExistException;
 import ru.yandex.practicum.filmorate.model.EventType;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.model.Operation;
+import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Collection;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -77,4 +77,39 @@ public class LikeService {
         log.info("getCommonFilms userId={} friendId={}", userId, friendId);
         return likeStorage.getCommonFilms(userId, friendId);
     }
+
+    public Collection<Film> getRecommendation(Long userId) {
+        log.info("getRecommendation userId={}", userId);
+
+        userStorage.getById(userId).orElseThrow(() -> {
+            log.warn("user with id={} not exist", userId);
+            throw new EntityNotExistException(String.format("Пользователь с id=%d не существует.", userId));
+        });
+
+        Collection<Long> userLikesFilms = likeStorage.getFilmsLikesByUser(userId);
+        HashMap<Long, Collection<Long>> commonLikesMap = new HashMap<>();
+        for (Long filmId : userLikesFilms) {
+            commonLikesMap.put(filmId, likeStorage.getUsersLikesByFilm(filmId));
+        }
+        HashMap<Long, Integer> commonLikesCount = new HashMap<>();
+        for (Collection<Long> commonLikesUsers : commonLikesMap.values()) {
+            for (Long id : commonLikesUsers) {
+                commonLikesCount.put(id, (likeStorage.getCommonFilms(userId, id)).size());
+            }
+        }
+        if (commonLikesCount.size() == 0) {
+            return new ArrayList<>();
+        } else {
+            Long recommenderId = Collections.max(commonLikesCount.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+
+            Collection<Long> recommenderLikesFilms = likeStorage.getFilmsLikesByUser(recommenderId);
+            recommenderLikesFilms.removeAll(userLikesFilms);
+            Collection<Film> result = new ArrayList<>();
+            for (Long recommenderFilmId : recommenderLikesFilms) {
+                result.add(filmStorage.getById(recommenderFilmId).get());
+            }
+            return result;
+        }
+    }
+
 }
