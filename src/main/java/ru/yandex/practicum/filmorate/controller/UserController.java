@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.service.EventService;
 import ru.yandex.practicum.filmorate.service.FriendshipService;
 import ru.yandex.practicum.filmorate.service.LikeService;
 import ru.yandex.practicum.filmorate.service.UserService;
@@ -19,14 +21,17 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final FriendshipService friendshipService;
+    private final EventService eventService;
 
     private final LikeService likeService;
 
     @Autowired
-    public UserController(UserService userService, FriendshipService friendshipService, LikeService likeService) {
+
+    public UserController(UserService userService, FriendshipService friendshipService, LikeService likeService, EventService eventService) {
         this.userService = userService;
         this.friendshipService = friendshipService;
-        this.likeService = likeService;
+        this.likeService = likeService; 
+        this.eventService = eventService;
     }
 
     @GetMapping
@@ -77,5 +82,9 @@ public class UserController {
     @GetMapping("/{id}/recommendations")
     public Collection<Film> getRecommendation(@PathVariable Long id) {
         return likeService.getRecommendation(id);
+
+    @GetMapping("/{id}/feed")
+    public Collection<Event> getUserEvents(@PathVariable Long id) {
+        return eventService.getUserEvents(id);
     }
 }
