@@ -45,7 +45,7 @@ public class LikeDbStorage implements LikeStorage {
         final String sql = "SELECT f.film_id FROM films f " +
                 "LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
                 "LEFT JOIN film_genre fg ON f.film_id = fg.film_id " +
-                "WHERE f.FILM_ID>0 " + genreIdAndYear +
+                "WHERE 1=1 " + genreIdAndYear +
                 "GROUP BY f.film_id ORDER BY COUNT(user_id) DESC LIMIT ?";
         List<Long> result = jdbcTemplate.queryForList(sql, Long.class, count);
         List<Film> popularFilms = new ArrayList<>();
