@@ -60,9 +60,9 @@ public class LikeService {
         eventService.createEvent(userId, EventType.LIKE, Operation.REMOVE, id);
     }
 
-    public Collection<Film> getPopularFilms(Integer count) {
+    public Collection<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
         log.info("getPopularFilms count={}", count);
-        return likeStorage.getPopularFilms(count);
+        return likeStorage.getPopularFilms(count, genreId, year);
     }
 
     public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {

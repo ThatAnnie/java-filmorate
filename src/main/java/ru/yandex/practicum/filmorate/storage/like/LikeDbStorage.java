@@ -34,9 +34,18 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public Collection<Film> getPopularFilms(Integer count) {
+    public Collection<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
+        String genreIdAndYear = "";
+        if (year != null) {
+            genreIdAndYear = String.join("", genreIdAndYear,"and year(f.RELEASE_DATE)=", year.toString());
+        }
+        if (genreId != null) {
+            genreIdAndYear = String.join("",genreIdAndYear, "and fg.GENRE_ID=", genreId.toString());
+        }
         final String sql = "SELECT f.film_id FROM films f " +
                 "LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
+                "LEFT JOIN film_genre fg ON f.film_id = fg.film_id " +
+                "WHERE 1=1 " + genreIdAndYear +
                 "GROUP BY f.film_id ORDER BY COUNT(user_id) DESC LIMIT ?";
         List<Long> result = jdbcTemplate.queryForList(sql, Long.class, count);
         List<Film> popularFilms = new ArrayList<>();
@@ -62,7 +71,7 @@ public class LikeDbStorage implements LikeStorage {
         List<Film> dirFilmsSortedByLikes = new ArrayList<>();
         result.forEach((filmId) -> dirFilmsSortedByLikes.add(filmDbStorage.getById(filmId).get()));
         return dirFilmsSortedByLikes;
-}
+    }
 
     public List<Film> getCommonFilms(Long userId, Long friendId) {
         final String sqlCommon = "(SELECT FILM_ID " +
@@ -78,7 +87,7 @@ public class LikeDbStorage implements LikeStorage {
                 "ORDER BY COUNT(user_id) DESC";
 
         List<Long> idsOfFilms = jdbcTemplate.queryForList(sqlSortedCommon, Long.class, userId, friendId);
-        List<Film> result     = new ArrayList<>();
+        List<Film> result = new ArrayList<>();
         idsOfFilms.forEach((filmId) -> result.add(filmDbStorage.getById(filmId).get()));
         return result;
     }
