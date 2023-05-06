@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.review;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,19 +19,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class ReviewDbStorage implements ReviewStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserStorage userStorage;
     private final FilmStorage filmStorage;
-
-    @Autowired
-    public ReviewDbStorage(JdbcTemplate jdbcTemplate, UserStorage userStorage, FilmStorage filmStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.userStorage = userStorage;
-        this.filmStorage = filmStorage;
-    }
 
     private Review makeReview(ResultSet rs) throws SQLException {
         Review review = new Review();

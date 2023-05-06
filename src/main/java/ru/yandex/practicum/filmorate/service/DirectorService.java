@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,15 +12,11 @@ import ru.yandex.practicum.filmorate.storage.director.DirectorStorage;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class DirectorService {
 
     private final DirectorStorage directorStorage;
-
-    @Autowired
-    public DirectorService(DirectorStorage directorStorage) {
-        this.directorStorage = directorStorage;
-    }
 
     public List<Director> getDirectors() {
         log.info("getDirectors");

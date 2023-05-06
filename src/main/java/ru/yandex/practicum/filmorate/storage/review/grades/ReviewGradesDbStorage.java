@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.review.grades;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,19 +10,13 @@ import ru.yandex.practicum.filmorate.storage.review.ReviewStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class ReviewGradesDbStorage implements ReviewGradesStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserStorage userStorage;
     private final ReviewStorage reviewStorage;
-
-    @Autowired
-    public ReviewGradesDbStorage(JdbcTemplate jdbcTemplate, UserStorage userStorage, ReviewStorage reviewStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.userStorage = userStorage;
-        this.reviewStorage = reviewStorage;
-    }
 
     private void isExist(long id, long userId) {
         if (userStorage.getById(userId).isEmpty()) {

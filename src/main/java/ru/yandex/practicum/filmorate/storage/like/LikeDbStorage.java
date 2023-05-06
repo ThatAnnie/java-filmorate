@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.like;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -11,15 +12,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LikeDbStorage implements LikeStorage {
     private final JdbcTemplate jdbcTemplate;
     private final FilmDbStorage filmDbStorage;
-
-    @Autowired
-    public LikeDbStorage(JdbcTemplate jdbcTemplate, FilmDbStorage filmDbStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.filmDbStorage = filmDbStorage;
-    }
 
     @Override
     public void addLike(Long id, Long userId) {
@@ -34,13 +30,13 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public Collection<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
+    public List<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
         String genreIdAndYear = "";
         if (year != null) {
-            genreIdAndYear = String.join("", genreIdAndYear,"and year(f.RELEASE_DATE)=", year.toString());
+            genreIdAndYear = String.join("", genreIdAndYear, "and year(f.RELEASE_DATE)=", year.toString());
         }
         if (genreId != null) {
-            genreIdAndYear = String.join("",genreIdAndYear, "and fg.GENRE_ID=", genreId.toString());
+            genreIdAndYear = String.join("", genreIdAndYear, "and fg.GENRE_ID=", genreId.toString());
         }
         final String sql = "SELECT f.film_id FROM films f " +
                 "LEFT JOIN film_like fl ON f.film_id = fl.film_id " +
@@ -54,14 +50,14 @@ public class LikeDbStorage implements LikeStorage {
     }
 
     @Override
-    public Collection<Long> getUsersLikesByFilm(Long filmId) {
+    public List<Long> getUsersLikesByFilm(Long filmId) {
         final String sql = "SELECT user_id FROM film_like WHERE film_id = ?";
         List<Long> users = jdbcTemplate.queryForList(sql, Long.class, filmId);
         return users;
     }
 
     @Override
-    public Collection<Film> getSortedFilmByLikesDirector(Long dirId) {
+    public List<Film> getSortedFilmByLikesDirector(Long dirId) {
         String sqlQuery = "SELECT f.film_id FROM films f " +
                 "LEFT JOIN FILM_DIRECTOR fd ON f.FILM_ID = fd.FILM_ID " +
                 "LEFT JOIN film_like fl ON fd.film_id = fl.film_id " +

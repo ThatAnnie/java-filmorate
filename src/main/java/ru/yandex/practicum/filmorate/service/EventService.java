@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,11 @@ import java.time.Instant;
 import java.util.Collection;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class EventService {
     private final EventStorage eventStorage;
     private final UserStorage userStorage;
-
-    @Autowired
-    public EventService(EventStorage eventStorage, UserStorage userStorage) {
-        this.eventStorage = eventStorage;
-        this.userStorage = userStorage;
-    }
 
     public Collection<Event> getUserEvents(Long id) {
         log.info("getUserEvents by user with id={}", id);

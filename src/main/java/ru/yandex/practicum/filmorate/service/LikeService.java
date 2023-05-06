@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class LikeService {
     private final FilmStorage filmStorage;
@@ -22,15 +24,6 @@ public class LikeService {
     private final LikeStorage likeStorage;
     private final DirectorStorage directorStorage;
     private final EventService eventService;
-
-    @Autowired
-    public LikeService(FilmStorage filmStorage, UserStorage userStorage, LikeStorage likeStorage, DirectorStorage directorStorage, EventService eventService) {
-        this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
-        this.likeStorage = likeStorage;
-        this.directorStorage = directorStorage;
-        this.eventService = eventService;
-    }
 
     public void addLike(Long id, Long userId) {
         log.info("addLike for film with id={} by user with id={}", id, userId);
@@ -78,8 +71,8 @@ public class LikeService {
         return likeStorage.getCommonFilms(userId, friendId);
     }
 
-    public Collection<Film> getRecommendation(Long userId) {
-        log.info("getRecommendation userId={}", userId);
+    public Collection<Film> getRecommendations(Long userId) {
+        log.info("getRecommendations userId={}", userId);
 
         userStorage.getById(userId).orElseThrow(() -> {
             log.warn("user with id={} not exist", userId);

@@ -1,20 +1,17 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.storage.review.grades.ReviewGradesStorage;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class ReviewGradesService {
 
     private final ReviewGradesStorage reviewGradesStorage;
-
-    @Autowired
-    public ReviewGradesService(ReviewGradesStorage reviewGradesStorage) {
-        this.reviewGradesStorage = reviewGradesStorage;
-    }
 
     public void addLikeToReview(long id, long userId) {
         log.info("User {} add like to review {}", userId, id);

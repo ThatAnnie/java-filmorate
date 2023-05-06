@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,17 +12,12 @@ import ru.yandex.practicum.filmorate.storage.review.ReviewStorage;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class ReviewService {
 
     private final ReviewStorage reviewStorage;
     private final EventService eventService;
-
-    @Autowired
-    public ReviewService(ReviewStorage reviewStorage, EventService eventService) {
-        this.reviewStorage = reviewStorage;
-        this.eventService = eventService;
-    }
 
     public Review saveReview(Review review) {
         log.info("save review {} ", review);

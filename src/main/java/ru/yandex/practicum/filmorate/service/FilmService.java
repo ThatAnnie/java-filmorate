@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class FilmService {
     private final FilmStorage filmStorage;
     private final DirectorStorage directorStorage;
     private final LikeService likeService;
-
-    @Autowired
-    public FilmService(FilmStorage filmStorage, DirectorStorage directorStorage, LikeService likeService) {
-        this.filmStorage = filmStorage;
-        this.directorStorage = directorStorage;
-        this.likeService = likeService;
-    }
 
     public List<Film> getFilms() {
         log.info("getFilms");
