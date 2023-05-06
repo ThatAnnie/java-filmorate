@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.friendship;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,14 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FriendshipDbStorage implements FriendshipStorage {
     private final JdbcTemplate jdbcTemplate;
     private final UserDbStorage userDbStorage;
-
-    public FriendshipDbStorage(JdbcTemplate jdbcTemplate, UserDbStorage userDbStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.userDbStorage = userDbStorage;
-    }
 
     @Override
     public void addFriend(Long id, Long friendId) {

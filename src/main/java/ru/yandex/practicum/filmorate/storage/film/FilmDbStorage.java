@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -24,20 +25,13 @@ import java.util.*;
 
 @Component
 @Primary
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final GenreDbStorage genreStorage;
     private final RatingDbStorage ratingStorage;
     private final DirectorDbStorage directorDbStorage;
-
-    @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, GenreDbStorage genreStorage, RatingDbStorage ratingStorage, DirectorDbStorage directorDbStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.genreStorage = genreStorage;
-        this.ratingStorage = ratingStorage;
-        this.directorDbStorage = directorDbStorage;
-    }
 
     private Film makeFilm(ResultSet rs) throws SQLException {
         Rating rating = ratingStorage.getById(rs.getLong("rating_id")).get();
@@ -149,7 +143,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Collection<Film> getFilmsByDirId(Long dirId) {
+    public List<Film> getFilmsByDirId(Long dirId) {
         String sqlQuery = "SELECT * " +
                 "FROM FILMS f " +
                 "LEFT JOIN FILM_DIRECTOR fd2 ON f.FILM_ID = fd2.FILM_ID " +
