@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
         friendshipService.deleteFriend(id, friendId);
     }
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }
