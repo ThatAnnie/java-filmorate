@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,13 +20,10 @@ import java.util.Optional;
 
 @Component
 @Primary
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
-
-    public UserDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private User makeUser(ResultSet rs) throws SQLException {
         User user = new User();
@@ -89,5 +88,11 @@ public class UserDbStorage implements UserStorage {
             return Optional.empty();
         }
         return Optional.ofNullable(result.get(0));
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM users WHERE user_id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

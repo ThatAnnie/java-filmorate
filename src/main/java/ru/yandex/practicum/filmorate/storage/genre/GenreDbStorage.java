@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.genre;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -19,14 +20,10 @@ import java.util.Optional;
 
 @Component
 @Primary
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public class GenreDbStorage implements GenreStorage {
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public GenreDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private Genre makeGenre(ResultSet rs) throws SQLException {
         return new Genre(rs.getInt("genre_id"), rs.getString("name"));
@@ -96,5 +93,11 @@ public class GenreDbStorage implements GenreStorage {
                 .forEach((genre) -> {
                     jdbcTemplate.update(sql, film.getId(), genre.getId());
                 });
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM genres WHERE genre_id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

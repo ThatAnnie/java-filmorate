@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.rating;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,13 +17,9 @@ import java.util.Optional;
 
 @Component
 @Primary
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RatingDbStorage implements RatingStorage {
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public RatingDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     private Rating makeRating(ResultSet rs) throws SQLException {
         return new Rating(rs.getInt("rating_id"), rs.getString("name"));
@@ -62,5 +59,11 @@ public class RatingDbStorage implements RatingStorage {
             return Optional.empty();
         }
         return Optional.ofNullable(result.get(0));
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "DELETE FROM rating WHERE rating_id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

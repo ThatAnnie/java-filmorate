@@ -18,11 +18,12 @@ import ru.yandex.practicum.filmorate.storage.like.LikeDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserDbStorage;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -225,7 +226,7 @@ public class FilmorateApplicationTests {
         likeDbStorage.addLike(filmDB3.getId(), userDB2.getId());
         likeDbStorage.addLike(filmDB3.getId(), userDB4.getId());
         likeDbStorage.addLike(filmDB2.getId(), userDB3.getId());
-        Collection<Film> popularFilms = likeDbStorage.getPopularFilms(2);
+        Collection<Film> popularFilms = likeDbStorage.getPopularFilms(2,null,null);
         assertThat(popularFilms.size()).isEqualTo(2);
         assertThat(popularFilms.contains(filmDB1)).isTrue();
         assertThat(popularFilms.contains(filmDB3)).isTrue();
@@ -354,5 +355,137 @@ public class FilmorateApplicationTests {
         List<User> friends = friendshipDbStorage.getCommonFriends(id1, id2);
         assertThat(friends.size()).isEqualTo(1);
         assertThat(friends.contains(userDB3)).isTrue();
+    }
+
+    @Test
+    void testCommonFilms() {
+        User user2 = new User();
+        user2.setName("UserName2");
+        user2.setLogin("login2");
+        user2.setEmail("test2@test.ru");
+        user2.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB2 = userDbStorage.save(user2);
+
+        User user3 = new User();
+        user3.setName("UserName3");
+        user3.setLogin("login3");
+        user3.setEmail("test3@test.ru");
+        user3.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB3 = userDbStorage.save(user3);
+
+        User user4 = new User();
+        user4.setName("UserName4");
+        user4.setLogin("login4");
+        user4.setEmail("test4@test.ru");
+        user4.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB4 = userDbStorage.save(user4);
+
+        Rating mpa = new Rating(2, "PG");
+        Film film1 = new Film();
+        film1.setName("FilmName1");
+        film1.setDescription("Description1");
+        film1.setDuration(120);
+        film1.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film1.setMpa(mpa);
+        Film filmDB1 = filmDbStorage.save(film1);
+
+        Rating mpa2 = new Rating(1, "G");
+        Film film2 = new Film();
+        film2.setName("FilmName2");
+        film2.setDescription("Description2");
+        film2.setDuration(120);
+        film2.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film2.setMpa(mpa2);
+        Film filmDB2 = filmDbStorage.save(film2);
+
+        Film film3 = new Film();
+        film3.setName("FilmName3");
+        film3.setDescription("Description3");
+        film3.setDuration(120);
+        film3.setReleaseDate(LocalDate.of(2010, 02, 9));
+        film3.setMpa(mpa);
+        Film filmDB3 = filmDbStorage.save(film3);
+
+        likeDbStorage.addLike(filmDB1.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB3.getId());
+        likeDbStorage.addLike(filmDB1.getId(), userDB4.getId());
+
+        likeDbStorage.addLike(filmDB2.getId(), userDB3.getId());
+
+        likeDbStorage.addLike(filmDB3.getId(), userDB2.getId());
+        likeDbStorage.addLike(filmDB3.getId(), userDB4.getId());
+
+        List<Film> commonFilms = likeDbStorage.getCommonFilms(userDB2.getId(), userDB4.getId());
+        assertThat(commonFilms.size()).isEqualTo(2);
+        assertThat(commonFilms.contains(filmDB1)).isTrue();
+        assertThat(commonFilms.contains(filmDB3)).isTrue();
+        assertThat((commonFilms).get(0).getName()).isEqualTo("FilmName1");
+    }
+
+    @Test
+    void testSaveFilmDeleteFilm() {
+        Rating mpa = new Rating(1, "G");
+        Film film = new Film();
+        film.setName("FilmName");
+        film.setDescription("Description");
+        film.setDuration(100);
+        film.setReleaseDate(LocalDate.of(2000, 02, 9));
+        film.setMpa(mpa);
+        Film filmDB = filmDbStorage.save(film);
+        Long id = filmDB.getId();
+        Film filmCheck = filmDbStorage.getById(id).get();
+        assertThat(filmCheck.getName()).isEqualTo("FilmName");
+        assertThat(filmCheck.getDescription()).isEqualTo("Description");
+        assertThat(filmCheck.getDuration()).isEqualTo(100);
+        assertThat(filmCheck.getMpa()).isEqualTo(mpa);
+
+        filmDbStorage.delete(id);
+        Optional<Film> filmDelete = filmDbStorage.getById(id);
+        assertThat(filmDelete.isEmpty()).isTrue();
+    }
+
+    @Test
+    void testSaveUserDeleteUser() {
+        User user = new User();
+        user.setName("UserName");
+        user.setLogin("login");
+        user.setEmail("test@test.ru");
+        user.setBirthday(LocalDate.of(1990, 03, 9));
+        User userDB = userDbStorage.save(user);
+        Long id = userDB.getId();
+        User userCheck = userDbStorage.getById(id).get();
+        assertThat(userCheck.getName()).isEqualTo("UserName");
+        assertThat(userCheck.getLogin()).isEqualTo("login");
+        assertThat(userCheck.getEmail()).isEqualTo("test@test.ru");
+
+        userDbStorage.delete(id);
+        Optional<User> userDelete = userDbStorage.getById(id);
+        assertThat(userDelete.isEmpty()).isTrue();
+    }
+
+    @Test
+    void testDeleteRatingSaveRating() {
+        long id = 1L;
+        ratingDbStorage.delete(id);
+        Optional<Rating> ratingDelete = ratingDbStorage.getById(id);
+        assertThat(ratingDelete.isEmpty()).isTrue();
+
+        Rating ratingSave = new Rating(id, "G");
+        ratingDbStorage.save(ratingSave);
+        Optional<Rating> ratingCheck = ratingDbStorage.getById(id);
+        assertThat(ratingCheck.get().getName()).isEqualTo("G");
+    }
+
+    @Test
+    void testDeleteGenreSaveGenre() {
+        Long id = 1L;
+        genreDbStorage.delete(id);
+        Optional<Genre> genreDelete = genreDbStorage.getById(id);
+        assertThat(genreDelete.isEmpty()).isTrue();
+
+        Genre genreSave = new Genre(id.intValue(), "Комедия");
+        genreDbStorage.save(genreSave);
+        Optional<Genre> genreCheck = genreDbStorage.getById(id);
+        assertThat(genreCheck.get().getName()).isEqualTo("Комедия");
     }
 }
